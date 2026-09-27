@@ -476,7 +476,7 @@
           sideList.innerHTML=`<div class="jma-archive-actions"><a class="jma-link-button" href="${routeLink.href}" target="_blank" rel="noopener">JMA 경로도 ↗</a><a class="jma-link-button" href="${pdfTrack.url}" target="_blank" rel="noopener">위치표 PDF ↗</a></div>`;
           mapTitle.textContent=`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 ${pdfTrack.name}`.trim();
           mapDescription.textContent="JMA 속보 위치표 PDF · 경로 재생";
-          setMessage("※ 속보 분석값이며 JMA 사후분석 후 확정값으로 변경될 수 있습니다.");
+          setMessage("");
           setStatus(`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 · 속보 경로`,"ok");
           return;
         }catch(err){
