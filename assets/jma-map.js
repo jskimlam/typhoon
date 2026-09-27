@@ -18,6 +18,8 @@
   const messageEl = byId("jmaMapMessage");
   const currentModeButton = byId("currentModeButton");
   const archiveModeButton = byId("archiveModeButton");
+  const mapStyleSatellite = byId("mapStyleSatellite");
+  const mapStyleStandard = byId("mapStyleStandard");
   const currentControls = byId("jmaCurrentControls");
   const archiveControls = byId("jmaArchiveControls");
   const activeSelect = byId("activeTyphoonSelect");
@@ -48,6 +50,11 @@
   let targetCache = [];
   let archiveRows = [];
   let archiveYearLoaded = null;
+  let standardBaseLayer = null;
+  let satelliteBaseLayer = null;
+  let activeBaseLayer = null;
+  const MAP_STYLE_KEY = "typhoon-map-style";
+  let mapStyle = (() => { try { return localStorage.getItem(MAP_STYLE_KEY) || "satellite"; } catch { return "satellite"; } })();
 
   const setStatus = (text, state="") => {
     statusEl.textContent = text;
@@ -89,16 +96,55 @@
 
   function initMap(){
     map = L.map(jmaMapEl,{zoomControl:true,preferCanvas:true,worldCopyJump:true}).setView([31,135],4);
+
     const jmaTiles = L.tileLayer("https://www.jma.go.jp/tile/jma/gray-cities/{z}/{x}/{y}.png",{
-      minZoom:2,maxZoom:12,maxNativeZoom:10,attribution:'<a href="https://www.jma.go.jp/" target="_blank" rel="noopener">JMA</a>'
+      minZoom:2,maxZoom:12,maxNativeZoom:10,
+      attribution:'<a href="https://www.jma.go.jp/" target="_blank" rel="noopener">JMA</a>'
     });
     const gsiTiles = L.tileLayer("https://maps.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png",{
-      minZoom:2,maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">GSI</a>'
+      minZoom:2,maxZoom:18,
+      attribution:'<a href="https://maps.gsi.go.jp/" target="_blank" rel="noopener">GSI</a>'
     });
-    let tileErrors=0;
-    jmaTiles.on("tileerror",()=>{ if (++tileErrors===5 && !map.hasLayer(gsiTiles)) gsiTiles.addTo(map); });
-    jmaTiles.addTo(map);
+    standardBaseLayer = L.layerGroup([gsiTiles, jmaTiles]);
+
+    const satelliteTiles = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",{
+      minZoom:2,maxZoom:18,
+      attribution:'Tiles &copy; Esri'
+    });
+    const satelliteLabels = L.tileLayer("https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",{
+      minZoom:2,maxZoom:18,
+      opacity:.9,
+      attribution:'Sources: Esri, Garmin, FAO, NOAA, USGS and others'
+    });
+    satelliteBaseLayer = L.layerGroup([satelliteTiles, satelliteLabels]);
+
+    let satelliteErrors=0;
+    satelliteTiles.on("tileerror",()=>{
+      satelliteErrors += 1;
+      if(satelliteErrors >= 8 && mapStyle === "satellite"){
+        setMapStyle("standard", false);
+        setStatus("위성지도 연결 불안정 · 일반지도로 전환","error");
+      }
+    });
+
+    setMapStyle(mapStyle, false);
     liveLayer.addTo(map);
+  }
+
+  function setMapStyle(style, remember=true){
+    if(!map || !standardBaseLayer || !satelliteBaseLayer) return;
+    const next = style === "standard" ? "standard" : "satellite";
+    if(activeBaseLayer) map.removeLayer(activeBaseLayer);
+    activeBaseLayer = next === "satellite" ? satelliteBaseLayer : standardBaseLayer;
+    activeBaseLayer.addTo(map);
+    mapStyle = next;
+    jmaMapEl.classList.toggle("satellite-mode", next === "satellite");
+    mapStyleSatellite?.setAttribute("aria-pressed", String(next === "satellite"));
+    mapStyleStandard?.setAttribute("aria-pressed", String(next === "standard"));
+    if(remember){
+      try { localStorage.setItem(MAP_STYLE_KEY, next); } catch {}
+    }
+    requestAnimationFrame(()=>map.invalidateSize());
   }
 
   function fitTo(points){
@@ -371,6 +417,8 @@
   kmaTab.addEventListener("click",()=>setProvider("kma"));
   currentModeButton.addEventListener("click",()=>setMode("current"));
   archiveModeButton.addEventListener("click",()=>setMode("archive"));
+  mapStyleSatellite?.addEventListener("click",()=>setMapStyle("satellite", true));
+  mapStyleStandard?.addEventListener("click",()=>setMapStyle("standard", true));
   activeSelect.addEventListener("change",loadSelectedLive);
   archiveYear.addEventListener("change",()=>loadArchiveYear(true));
   archiveStormSelect.addEventListener("change",renderArchiveStorm);
