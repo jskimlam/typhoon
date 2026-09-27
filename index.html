@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="assets/lam-typhoon-icon.png">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
   <link rel="stylesheet" href="assets/jma-map.css">
+  <link rel="stylesheet" href="assets/chart-export.css">
   <title>동북아 태풍 아카이브</title>
   <style>
     :root {
@@ -920,6 +921,16 @@
       document.querySelector("#summaryImpact").textContent = `${formatNumber(impact)}개`;
       document.querySelector("#summaryPeak").textContent = `${peak.month}월 · ${formatNumber(peak.total)}개`;
       document.querySelector("#summaryRate").textContent = total ? `${(impact / total * 100).toFixed(1)}%` : "0%";
+      window.__typhoonExportState = {
+        items: items.map(item => ({ month: item.month, total: Number(item.total), impact: Number(item.impact) })),
+        total: Number(total),
+        impact: Number(impact),
+        isAverage,
+        label,
+        totalLabel: isAverage ? "연평균 발생" : "연간 발생",
+        impactLabel: isAverage ? "연평균 한국 영향" : "연간 한국 영향",
+        currentMonth: new Date().getMonth() + 1
+      };
       renderChart(items);
     }
 
@@ -1017,5 +1028,6 @@
   </script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="assets/jma-map.js"></script>
+  <script src="assets/chart-export.js"></script>
 </body>
 </html>
