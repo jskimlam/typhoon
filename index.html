@@ -850,7 +850,7 @@
         <div class="summary-item"><small id="impactLabel">연평균 한국 영향</small><strong id="summaryImpact">—</strong></div>
         <div class="summary-item"><small>발생 최다월</small><strong id="summaryPeak">—</strong></div>
         <div class="summary-item"><small>전체 발생 평년비</small><strong id="summaryWholeRate">—</strong></div>
-        <div class="summary-item"><small>한국 영향 / 전체</small><strong id="summaryRate">—</strong></div>
+        <div class="summary-item"><small>한국 영향 평년비</small><strong id="summaryRate">—</strong></div>
       </div>
       <div class="chart" id="monthlyChart" role="img" aria-label="기상청 월별 태풍 발생 및 한국 영향 평년값 그래프"></div>
       <div class="season-scale" aria-label="월별 태풍 시즌 주의 단계">
@@ -890,6 +890,7 @@
     let annualData = [];
 
     const NORMAL_ANNUAL_TOTAL = 25.1;
+    const NORMAL_KOREA_IMPACT = 3.4;
     const formatNumber = value => Number.isInteger(value) ? String(value) : value.toFixed(1);
 
     function renderChart(items) {
@@ -929,8 +930,9 @@
       document.querySelector("#summaryImpact").textContent = `${formatNumber(impact)}개`;
       document.querySelector("#summaryPeak").textContent = `${peak.month}월 · ${formatNumber(peak.total)}개`;
       const wholeRate = NORMAL_ANNUAL_TOTAL ? total / NORMAL_ANNUAL_TOTAL * 100 : 0;
+      const impactNormalRate = NORMAL_KOREA_IMPACT ? impact / NORMAL_KOREA_IMPACT * 100 : 0;
       document.querySelector("#summaryWholeRate").textContent = `${wholeRate.toFixed(1)}%`;
-      document.querySelector("#summaryRate").textContent = total ? `${(impact / total * 100).toFixed(1)}%` : "0%";
+      document.querySelector("#summaryRate").textContent = `${impactNormalRate.toFixed(1)}%`;
       window.__typhoonExportState = {
         items: items.map(item => ({ month: item.month, total: Number(item.total), impact: Number(item.impact) })),
         total: Number(total),
@@ -940,7 +942,9 @@
         totalLabel: isAverage ? "연평균 발생" : "연간 발생",
         impactLabel: isAverage ? "연평균 한국 영향" : "연간 한국 영향",
         normalAnnualTotal: NORMAL_ANNUAL_TOTAL,
+        normalKoreaImpact: NORMAL_KOREA_IMPACT,
         wholeRate,
+        impactNormalRate,
         currentMonth: new Date().getMonth() + 1
       };
       renderChart(items);
@@ -979,9 +983,9 @@
       startYear.innerHTML = options;
       endYear.innerHTML = options;
       singleYear.innerHTML = options;
-      startYear.value = years.includes(1991) ? "1991" : String(years[0]);
-      endYear.value = years.includes(2020) ? "2020" : String(years.at(-1));
-      singleYear.value = String(years.at(-1));
+      startYear.value = years.includes(2023) ? "2023" : String(years[Math.max(0, years.length - 3)]);
+      endYear.value = years.includes(2025) ? "2025" : String(years.at(-1));
+      singleYear.value = years.includes(2025) ? "2025" : String(years.at(-1));
     }
 
     viewMode.addEventListener("change", () => {
