@@ -133,9 +133,10 @@
     const totalLabel = escapeXml(state.totalLabel || (state.isAverage ? "연평균 발생" : "연간 발생"));
     const impactLabel = escapeXml(state.impactLabel || (state.isAverage ? "연평균 한국 영향" : "연간 한국 영향"));
     const subtitle = escapeXml(state.label || "");
-    const rate = Number(state.total) ? (Number(state.impact) / Number(state.total) * 100).toFixed(1) + "%" : "0%";
     const normalAnnualTotal = Number(state.normalAnnualTotal) || 25.1;
+    const normalKoreaImpact = Number(state.normalKoreaImpact) || 3.4;
     const wholeRate = normalAnnualTotal ? (Number(state.total) / normalAnnualTotal * 100).toFixed(1) + "%" : "—";
+    const impactNormalRate = normalKoreaImpact ? (Number(state.impact) / normalKoreaImpact * 100).toFixed(1) + "%" : "—";
     const peak = items.reduce((best, d) => Number(d.total) > Number(best.total) ? d : best, items[0]);
 
     const gridLines = [0, .25, .5, .75, 1].map(p => {
@@ -170,7 +171,7 @@
       {label: impactLabel, value: fmt(state.impact) + "개", color:"#F2B638"},
       {label:"발생 최다월", value:`${peak.month}월 · ${fmt(peak.total)}개`, color:"#40BFEF"},
       {label:"전체 발생 평년비", value:wholeRate, color:"#35B9E8"},
-      {label:"한국 영향 / 전체", value:rate, color:"#FF5874"}
+      {label:"한국 영향 평년비", value:impactNormalRate, color:"#FF5874"}
     ].map((k, i) => {
       const gap = 12;
       const width = (1456 - gap * 4) / 5;
