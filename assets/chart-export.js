@@ -155,9 +155,11 @@
       const impactX = gx + gap/2;
       const totalY = plotBottom - totalH;
       const impactY = plotBottom - impactH;
-      const peakBand = d.month >= 7 && d.month <= 10
+      const peakBand = d.month >= 7 && d.month <= 9
         ? `<rect x="${chartX + groupW*i + 5}" y="${chartY+8}" width="${groupW-10}" height="${chartH-18}" rx="14" fill="#FF6E7F" fill-opacity=".055"/>`
-        : "";
+        : d.month === 10
+          ? `<rect x="${chartX + groupW*i + 5}" y="${chartY+8}" width="${groupW-10}" height="${chartH-18}" rx="14" fill="#F2B638" fill-opacity=".055"/>`
+          : "";
       return `
         ${peakBand}
         <rect x="${totalX}" y="${totalY}" width="${totalBarW}" height="${totalH}" rx="10" fill="url(#blueBar)"/>
