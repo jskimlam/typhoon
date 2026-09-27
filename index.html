@@ -28,6 +28,7 @@
     body {
       margin: 0;
       min-width: 320px;
+      overflow-x: hidden;
       background:
         radial-gradient(circle at 9% 4%, rgba(56, 135, 255, 0.18), transparent 32rem),
         radial-gradient(circle at 88% 15%, rgba(89, 216, 255, 0.12), transparent 25rem),
@@ -121,6 +122,7 @@
 
     .layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(310px, .8fr); gap: 16px; }
     .panel {
+      min-width: 0;
       border: 1px solid var(--line);
       border-radius: 20px;
       background: var(--panel);
@@ -141,8 +143,81 @@
     .panel-head p { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
     .badge { padding: 7px 10px; border-radius: 999px; background: rgba(89,216,255,.11); color: var(--cyan); font-size: .72rem; white-space: nowrap; }
 
-    .map-wrap { position: relative; height: min(61vh, 650px); min-height: 430px; background: #0b1d2d; }
-    .map-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .map-wrap { position: relative; height: min(61vh, 650px); min-height: 430px; overflow: hidden; background: #0b1d2d; }
+    .map-wrap iframe {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      transform-origin: top left;
+    }
+    .map-wrap.is-locked iframe { pointer-events: none; }
+    .map-toolbar {
+      position: absolute;
+      z-index: 5;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 7px;
+    }
+    .map-control {
+      min-height: 36px;
+      padding: 0 11px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 10px;
+      background: rgba(6,17,31,.88);
+      color: #eef7ff;
+      font: inherit;
+      font-size: .7rem;
+      font-weight: 750;
+      box-shadow: 0 7px 18px rgba(0,0,0,.24);
+      cursor: pointer;
+    }
+    .map-control.lock { display: none; border-color: rgba(255,200,92,.42); color: #ffe18a; }
+    .map-wrap.is-interactive .map-control.lock { display: inline-flex; align-items: center; }
+    .map-gesture-guard {
+      position: absolute;
+      z-index: 4;
+      inset: 0;
+      display: none;
+      place-items: center;
+      width: 100%;
+      padding: 22px;
+      border: 0;
+      background: linear-gradient(rgba(3,12,22,.05), rgba(3,12,22,.38));
+      color: var(--text);
+      font: inherit;
+      text-align: center;
+      touch-action: pan-y;
+      cursor: pointer;
+    }
+    .map-wrap.is-locked .map-gesture-guard { display: grid; }
+    .map-gesture-guard span {
+      display: grid;
+      gap: 5px;
+      max-width: 250px;
+      padding: 13px 17px;
+      border: 1px solid rgba(89,216,255,.34);
+      border-radius: 14px;
+      background: rgba(6,17,31,.9);
+      color: #eaf7ff;
+      font-size: .82rem;
+      font-weight: 800;
+      box-shadow: 0 14px 34px rgba(0,0,0,.34);
+    }
+    .map-gesture-guard small { color: #9fb4c7; font-size: .67rem; font-weight: 550; line-height: 1.45; }
+    .map-wrap.is-expanded {
+      position: fixed;
+      z-index: 100;
+      inset: 0;
+      width: 100vw;
+      height: 100dvh;
+      min-height: 0;
+      border-radius: 0;
+    }
+    body.map-expanded { overflow: hidden; }
     .map-label {
       position: absolute;
       z-index: 2;
@@ -386,7 +461,7 @@
     }
 
     @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; }
+      .layout { grid-template-columns: minmax(0, 1fr); }
       .map-wrap { min-height: 480px; }
       .side { grid-template-columns: 1fr 1fr; }
       .period-summary { grid-template-columns: repeat(2, 1fr); }
@@ -394,12 +469,19 @@
 
     @media (max-width: 620px) {
       .shell { padding: 14px; }
-      header { align-items: flex-start; }
+      header { display: grid; grid-template-columns: minmax(0, 1fr); align-items: flex-start; }
+      .brand { min-width: 0; }
+      .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+      .actions .button { min-width: 0; padding-inline: 10px; font-size: .76rem; text-align: center; }
       .actions .official { display: none; }
       .notice { align-items: flex-start; flex-direction: column; gap: 6px; }
       .side { grid-template-columns: 1fr; }
-      .map-wrap { min-height: 430px; height: 58vh; }
-      .panel-head { padding: 16px; }
+      .map-wrap { min-height: 390px; height: clamp(390px, 58vh, 520px); }
+      .map-toolbar { top: 9px; right: 9px; }
+      .map-control { min-height: 38px; background: rgba(6,17,31,.93); }
+      .map-label { left: 9px; bottom: 9px; max-width: calc(100% - 18px); padding: 8px 10px; font-size: .65rem; }
+      .panel-head { gap: 10px; padding: 16px; }
+      .panel-head .badge { padding: 6px 8px; font-size: .63rem; }
       .panel-head.chart-heading { display: grid; }
       .chart-tools { align-items: flex-start; }
       .filters { width: 100%; }
@@ -450,7 +532,11 @@
           </div>
           <span class="badge">KMA OFFICIAL</span>
         </div>
-        <div class="map-wrap">
+        <div class="map-wrap" id="mapWrap">
+          <div class="map-toolbar" aria-label="지도 보기 설정">
+            <button class="map-control lock" id="lockMap" type="button">지도 잠금</button>
+            <button class="map-control" id="expandMap" type="button" aria-pressed="false">화면 채우기</button>
+          </div>
           <iframe
             id="weatherFrame"
             title="기상청 태풍 상세정보"
@@ -458,6 +544,9 @@
             allowfullscreen
             src="https://www.weather.go.kr/w/typhoon/ko/weather/typhoon_02.jsp">
           </iframe>
+          <button class="map-gesture-guard" id="mapGestureGuard" type="button">
+            <span>눌러서 지도 조작<small>현재는 페이지 스크롤이 움직이지 않도록 지도를 잠갔습니다.</small></span>
+          </button>
           <div class="map-label">기상청이 제공하는 공식 태풍 상세정보 화면입니다. 태풍 정보 종료 후에도 24시간 동안 표시될 수 있습니다.</div>
         </div>
       </article>
@@ -720,19 +809,80 @@
       }).format(new Date())}`;
     };
 
+    const mapWrap = document.querySelector("#mapWrap");
+    const weatherFrame = document.querySelector("#weatherFrame");
+    const mapGestureGuard = document.querySelector("#mapGestureGuard");
+    const lockMapButton = document.querySelector("#lockMap");
+    const expandMapButton = document.querySelector("#expandMap");
+    const compactMapQuery = window.matchMedia("(max-width: 620px)");
+    const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
+
+    const setMapLocked = locked => {
+      mapWrap.classList.toggle("is-locked", locked);
+      mapWrap.classList.toggle("is-interactive", !locked);
+    };
+
+    const layoutWeatherFrame = () => {
+      const useWidePreview = compactMapQuery.matches || (coarsePointerQuery.matches && mapWrap.classList.contains("is-expanded"));
+      if (!useWidePreview) {
+        weatherFrame.style.width = "";
+        weatherFrame.style.height = "";
+        weatherFrame.style.transform = "";
+        return;
+      }
+
+      const sourceWidth = 1200;
+      const scale = mapWrap.clientWidth / sourceWidth;
+      weatherFrame.style.width = `${sourceWidth}px`;
+      weatherFrame.style.height = `${Math.ceil(mapWrap.clientHeight / scale)}px`;
+      weatherFrame.style.transform = `scale(${scale})`;
+    };
+
+    mapGestureGuard.addEventListener("click", () => setMapLocked(false));
+    lockMapButton.addEventListener("click", () => setMapLocked(true));
+    expandMapButton.addEventListener("click", () => {
+      const expanded = !mapWrap.classList.contains("is-expanded");
+      mapWrap.classList.toggle("is-expanded", expanded);
+      document.body.classList.toggle("map-expanded", expanded);
+      expandMapButton.textContent = expanded ? "원래 크기" : "화면 채우기";
+      expandMapButton.setAttribute("aria-pressed", String(expanded));
+      requestAnimationFrame(layoutWeatherFrame);
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape" || !mapWrap.classList.contains("is-expanded")) return;
+      mapWrap.classList.remove("is-expanded");
+      document.body.classList.remove("map-expanded");
+      expandMapButton.textContent = "화면 채우기";
+      expandMapButton.setAttribute("aria-pressed", "false");
+      requestAnimationFrame(layoutWeatherFrame);
+    });
+
+    const applyMapMode = () => {
+      setMapLocked(compactMapQuery.matches || coarsePointerQuery.matches);
+      layoutWeatherFrame();
+    };
+    compactMapQuery.addEventListener?.("change", applyMapMode);
+    coarsePointerQuery.addEventListener?.("change", applyMapMode);
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(layoutWeatherFrame).observe(mapWrap);
+    } else {
+      window.addEventListener("resize", layoutWeatherFrame);
+    }
+    applyMapMode();
+
     document.querySelector("#refreshMap").addEventListener("click", event => {
       const button = event.currentTarget;
-      const frame = document.querySelector("#weatherFrame");
-      const url = new URL(frame.src);
+      const url = new URL(weatherFrame.src);
       url.searchParams.set("refresh", Date.now());
       button.textContent = "새로 불러오는 중…";
       button.disabled = true;
-      frame.addEventListener("load", () => {
+      weatherFrame.addEventListener("load", () => {
         button.textContent = "태풍정보 새로고침";
         button.disabled = false;
         updateSyncTime();
+        layoutWeatherFrame();
       }, { once: true });
-      frame.src = url.toString();
+      weatherFrame.src = url.toString();
     });
 
     updateSyncTime();
