@@ -317,7 +317,7 @@
     .range-fields[hidden], .single-field[hidden] { display: none; }
     .period-summary {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
       padding: 4px 20px 0;
     }
@@ -332,7 +332,8 @@
     .summary-item::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--blue); }
     .summary-item:nth-child(2)::before { background: var(--yellow); }
     .summary-item:nth-child(3)::before { background: var(--cyan); }
-    .summary-item:nth-child(4)::before { background: var(--red); }
+    .summary-item:nth-child(4)::before { background: var(--cyan); }
+    .summary-item:nth-child(5)::before { background: var(--red); }
     .summary-item small { display: block; color: var(--muted); font-size: .7rem; }
     .summary-item strong { display: block; margin-top: 7px; font-size: 1.35rem; letter-spacing: -.04em; }
     .legend { display: flex; gap: 13px; color: var(--muted); font-size: .72rem; }
@@ -436,7 +437,8 @@
       .layout { grid-template-columns: minmax(0, 1fr); }
       .map-wrap { min-height: 480px; }
       .side { grid-template-columns: 1fr 1fr; }
-      .period-summary { grid-template-columns: repeat(2, 1fr); }
+      .period-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .period-summary .summary-item:last-child { grid-column: 1 / -1; }
     }
 
     @media (max-width: 620px) {
@@ -847,7 +849,8 @@
         <div class="summary-item"><small id="totalLabel">연평균 발생</small><strong id="summaryTotal">—</strong></div>
         <div class="summary-item"><small id="impactLabel">연평균 한국 영향</small><strong id="summaryImpact">—</strong></div>
         <div class="summary-item"><small>발생 최다월</small><strong id="summaryPeak">—</strong></div>
-        <div class="summary-item"><small>한국 영향 비율</small><strong id="summaryRate">—</strong></div>
+        <div class="summary-item"><small>전체 발생 평년비</small><strong id="summaryWholeRate">—</strong></div>
+        <div class="summary-item"><small>한국 영향 / 전체</small><strong id="summaryRate">—</strong></div>
       </div>
       <div class="chart" id="monthlyChart" role="img" aria-label="기상청 월별 태풍 발생 및 한국 영향 평년값 그래프"></div>
       <div class="season-scale" aria-label="월별 태풍 시즌 주의 단계">
@@ -886,6 +889,7 @@
     const singleField = document.querySelector("#singleField");
     let annualData = [];
 
+    const NORMAL_ANNUAL_TOTAL = 25.1;
     const formatNumber = value => Number.isInteger(value) ? String(value) : value.toFixed(1);
 
     function renderChart(items) {
@@ -924,6 +928,8 @@
       document.querySelector("#summaryTotal").textContent = `${formatNumber(total)}개`;
       document.querySelector("#summaryImpact").textContent = `${formatNumber(impact)}개`;
       document.querySelector("#summaryPeak").textContent = `${peak.month}월 · ${formatNumber(peak.total)}개`;
+      const wholeRate = NORMAL_ANNUAL_TOTAL ? total / NORMAL_ANNUAL_TOTAL * 100 : 0;
+      document.querySelector("#summaryWholeRate").textContent = `${wholeRate.toFixed(1)}%`;
       document.querySelector("#summaryRate").textContent = total ? `${(impact / total * 100).toFixed(1)}%` : "0%";
       window.__typhoonExportState = {
         items: items.map(item => ({ month: item.month, total: Number(item.total), impact: Number(item.impact) })),
@@ -933,6 +939,8 @@
         label,
         totalLabel: isAverage ? "연평균 발생" : "연간 발생",
         impactLabel: isAverage ? "연평균 한국 영향" : "연간 한국 영향",
+        normalAnnualTotal: NORMAL_ANNUAL_TOTAL,
+        wholeRate,
         currentMonth: new Date().getMonth() + 1
       };
       renderChart(items);
