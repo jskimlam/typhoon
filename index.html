@@ -468,6 +468,171 @@
       .chart { margin-inline: 14px; }
       .footnote { flex-direction: column; gap: 5px; }
     }
+  
+    /* Fold / mobile fluid UI refinements */
+    @media (max-width: 900px) {
+      body { min-width: 0; }
+      .shell { padding: clamp(10px, 2.1vw, 18px); }
+      .chart {
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: clamp(2px, .65vw, 7px);
+        margin: 14px clamp(8px, 2vw, 16px);
+        padding: 44px clamp(6px, 1.4vw, 12px) 16px;
+        overflow: visible;
+      }
+      .month { min-width: 0; padding-inline: 1px; }
+      .bars { gap: clamp(1px, .35vw, 5px); }
+      .bar-set { width: 44%; max-width: 28px; min-width: 0; }
+      .bar-set.impact-set { width: 34%; max-width: 20px; }
+      .bar, .bar.impact { width: 100%; }
+      .bar-number { font-size: clamp(.5rem, 1.25vw, .7rem); }
+      .season-scale { overflow: visible; }
+      .season-months { min-width: 0; }
+    }
+
+    @media (max-width: 620px) {
+      body { min-width: 0; }
+      .shell { padding: 10px; }
+      header { gap: 11px; margin-bottom: 12px; }
+      .brand { gap: 9px; }
+      .brand-mark { width: 39px; border-radius: 12px; }
+      .brand-title-line { gap: 6px; }
+      h1 { font-size: clamp(1rem, 5vw, 1.2rem); }
+      .owner-mark { padding: 4px 6px; font-size: .56rem; }
+      .eyebrow { font-size: .68rem; }
+      .actions { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+      .actions .button,
+      .actions .official {
+        display: inline-flex;
+        min-height: 38px;
+        padding-inline: 7px;
+        font-size: clamp(.66rem, 3vw, .75rem);
+        line-height: 1.2;
+      }
+      .notice { padding: 10px 12px; margin-bottom: 11px; font-size: .76rem; }
+      .sync { font-size: .66rem; }
+      .panel { border-radius: 16px; }
+      .panel-head { padding: 13px 14px; }
+      .panel-head h2 { font-size: .92rem; }
+      .panel-head p { margin-top: 4px; font-size: .69rem; }
+      .map-wrap { min-height: 360px; height: clamp(360px, 56dvh, 500px); }
+      .stats { gap: 7px; padding: 10px; }
+      .stat { min-height: 90px; padding: 11px; }
+      .stat small { font-size: .68rem; }
+      .stat strong { margin-top: 7px; font-size: 1.35rem; }
+      .source-card { padding: 14px; }
+      .season-alert { margin-top: 11px; gap: 10px; padding: 13px; border-radius: 16px; }
+      .alert-icon { width: 42px; border-radius: 12px; font-size: 1.1rem; }
+      .alert-copy h2 { font-size: .9rem; }
+      .alert-copy p { font-size: .7rem; line-height: 1.55; }
+      .risk-status { min-width: 0; padding: 9px 10px; }
+      .risk-checks { gap: 5px; }
+      .risk-checks span { padding: 6px 8px; font-size: .62rem; }
+      .chart-panel { margin-top: 11px; }
+      .chart-heading { padding-bottom: 8px; }
+      .chart-tools { gap: 8px; }
+      .filters { gap: 6px; }
+      .filters label { font-size: .64rem; }
+      .select { min-height: 34px; padding: 0 26px 0 8px; font-size: .7rem; }
+      .legend { gap: 8px; font-size: .62rem; }
+      .period-summary { gap: 7px; padding: 9px 9px 0; }
+      .summary-item { padding: 9px 10px; border-radius: 10px; }
+      .summary-item small { font-size: .61rem; }
+      .summary-item strong { margin-top: 5px; font-size: 1.05rem; }
+
+      /* All 12 months remain visible without horizontal scrolling */
+      .chart {
+        width: auto;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        gap: clamp(1px, .45vw, 3px);
+        min-height: 258px;
+        margin: 10px 7px;
+        padding: 34px 3px 10px;
+        overflow: visible;
+        border-radius: 12px;
+      }
+      .month { min-width: 0; padding: 3px 0; border-radius: 7px; }
+      .bars { height: 174px; gap: 1px; }
+      .bar-set { width: 45%; max-width: 14px; }
+      .bar-set.impact-set { width: 35%; max-width: 10px; }
+      .bar { min-height: 3px; border-radius: 6px 6px 2px 2px; }
+      .bar::after { inset: 2px 2px auto; }
+      .bar-number {
+        bottom: calc(var(--bar-height) + 4px);
+        font-size: clamp(.46rem, 2vw, .58rem);
+        text-shadow: 0 1px 4px #020913;
+      }
+      .month-label { margin-top: 7px; font-size: clamp(.48rem, 2vw, .59rem); }
+      .month-value { display: none; }
+
+      .season-scale { padding: 0 7px 15px; overflow: visible; }
+      .season-scale-head { margin-bottom: 6px; font-size: .59rem; }
+      .season-months { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2px; min-width: 0; }
+      .season-month {
+        min-width: 0;
+        padding: 6px 0;
+        border-radius: 5px;
+        font-size: clamp(.46rem, 1.9vw, .56rem);
+        white-space: nowrap;
+      }
+      .season-month.current::after { content: "•"; bottom: -13px; font-size: .7rem; }
+      .footnote { padding: 10px 12px; font-size: .63rem; }
+    }
+
+    @media (max-width: 430px) {
+      .panel-head .badge { font-size: .56rem; }
+      .map-tabs { padding: 7px; }
+      .map-tab, .map-expand { min-height: 38px; padding-inline: 6px; font-size: .62rem; }
+      .map-label { padding: 8px 9px; font-size: .59rem; }
+      .filters { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; }
+      .filters > .select { width: 100%; }
+      .range-fields, .single-field { grid-column: 1 / -1; width: 100%; }
+      .range-fields .select, .single-field .select { min-width: 0; flex: 1; }
+      .period-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .chart {
+        min-height: 238px;
+        margin-inline: 5px;
+        padding-inline: 2px;
+      }
+      .bars { height: 158px; }
+      .bar-set { max-width: 12px; }
+      .bar-set.impact-set { max-width: 8px; }
+      .bar-number { font-size: .46rem; }
+      .impact-set .bar-number { display: none; }
+      .month-label { font-size: .48rem; }
+      .season-scale-head span:last-child { display: none; }
+    }
+
+    @media (max-width: 350px) {
+      .shell { padding: 7px; }
+      .brand-mark { width: 35px; }
+      h1 { font-size: .98rem; }
+      .owner-mark { font-size: .5rem; }
+      .actions { gap: 4px; }
+      .actions .button,
+      .actions .official { min-height: 36px; padding-inline: 5px; font-size: .62rem; }
+      .notice { padding: 9px; font-size: .7rem; }
+      .panel { border-radius: 14px; }
+      .panel-head { padding: 11px; }
+      .map-tab, .map-expand { min-height: 36px; font-size: .58rem; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .stat { padding: 9px; }
+      .stat strong { font-size: 1.18rem; }
+      .chart { min-height: 218px; margin-inline: 3px; padding-top: 30px; }
+      .bars { height: 142px; }
+      .bar-number { font-size: .43rem; }
+      .month-label { font-size: .45rem; }
+      .season-month { font-size: .43rem; }
+    }
+
+    /* Short-height fold landscape: preserve map usability */
+    @media (min-width: 621px) and (max-height: 620px) {
+      .map-wrap { height: 68dvh; min-height: 330px; }
+      .shell { padding-block: 12px; }
+      header { margin-bottom: 11px; }
+      .notice { margin-bottom: 11px; padding-block: 10px; }
+    }
+
   </style>
 </head>
 <body>
