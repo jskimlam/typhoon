@@ -336,39 +336,62 @@
         grouped.get(key).push({x,text});
       });
       [...grouped.entries()].sort((a,b)=>b[0]-a[0]).forEach(([,items])=>{
-        const line=items.sort((a,b)=>a.x-b.x).map(v=>v.text).join(" ").replace(/\s+/g," ").trim();
+        const line=items
+          .sort((a,b)=>a.x-b.x)
+          .map(v=>v.text)
+          .join(" ")
+          .replace(/\s+/g," ")
+          .trim();
         if(line){lines.push(line);allText+=" "+line;}
       });
     }
-    const titleMatch=allText.match(/台風第\s*\d+\s*号\s+([A-Z][A-Z0-9-]*)\s*\(\s*\d{4}\s*\)/i);
+
+    const titleMatch=allText.match(/(?:\d{4}年)?台風第\s*\d+\s*号\s+([A-Z][A-Z0-9-]*)\s*\(\s*\d{4}\s*\)/i);
     const name=titleMatch?.[1]||"";
     const rows=[];
     let month=null,day=null;
+    let lastLatDir="N",lastLonDir="E";
+
     for(const line of lines){
-      const m=line.match(/^(.*?)\b(\d{1,2}(?:\.\d+)?)\s*([NS])\s+(\d{2,3}(?:\.\d+)?)\s*([EW])\s+(\d{3,4}|--|---)\s+(\d{1,3}|--|---)\b/);
+      // JMA速報PDFは最初の行では "8.5 N 136.6 E"、以降は
+      // "9.1 136.5" のように N/E を省略するため両形式を許容する。
+      const m=line.match(/^(.*?)\b(\d{1,2}(?:\.\d+)?)\s*(?:([NS])\s*)?(\d{2,3}(?:\.\d+)?)\s*(?:([EW])\s*)?(\d{3,4}|--|---)\s+(\d{1,3}|--|---)\b/i);
       if(!m) continue;
+
       const prefixNums=(m[1].match(/\d{1,4}/g)||[]).map(Number);
       if(!prefixNums.length) continue;
+
       let hour=null;
       if(prefixNums.length>=3){
         const vals=prefixNums.slice(-3);
-        month=vals[0];day=vals[1];hour=vals[2];
+        month=vals[0]; day=vals[1]; hour=vals[2];
       }else if(prefixNums.length===2){
-        day=prefixNums[0];hour=prefixNums[1];
+        day=prefixNums[0]; hour=prefixNums[1];
       }else{
         hour=prefixNums[0];
       }
       if(!(month>=1&&month<=12&&day>=1&&day<=31&&hour>=0&&hour<=23)) continue;
+
+      const latDir=(m[3]||lastLatDir||"N").toUpperCase();
+      const lonDir=(m[5]||lastLonDir||"E").toUpperCase();
+      lastLatDir=latDir; lastLonDir=lonDir;
+
       let lat=Number(m[2]),lon=Number(m[4]);
-      if(m[3]==="S") lat=-lat;
-      if(m[5]==="W") lon=-lon;
+      if(latDir==="S") lat=-lat;
+      if(lonDir==="W") lon=-lon;
+      if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180) continue;
+
       const pressure=/^\d+$/.test(m[6])?Number(m[6]):null;
       const wind=/^\d+$/.test(m[7])?Number(m[7]):null;
+      const key=`${month}-${day}-${hour}-${lat}-${lon}`;
+      if(rows.some(r=>r.key===key)) continue;
+
       rows.push({
-        month,day,hour,lat,lon,pressure,wind,
+        key,month,day,hour,lat,lon,pressure,wind,
         label:`${month}/${day} ${String(hour).padStart(2,"0")}시`
       });
     }
+
     return {rows,name,url};
   }
   function updateArchiveLinks(){
