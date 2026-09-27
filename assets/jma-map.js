@@ -49,6 +49,7 @@
   let lastTargetRefresh = 0;
   let targetCache = [];
   let archiveRows = [];
+  let archiveStormMeta = new Map();
   let archiveYearLoaded = null;
   let standardBaseLayer = null;
   let satelliteBaseLayer = null;
@@ -290,6 +291,27 @@
     try{text=new TextDecoder("shift_jis").decode(buf);}catch{ text=new TextDecoder("utf-8").decode(buf); }
     return text.split(/\r?\n/).filter(Boolean).map(parseCsvLine).filter(r=>r.length>=11 && /^\d{4}$/.test(String(r[4]||"")));
   }
+  async function fetchArchiveIndex(year){
+    const res=await fetch(cacheBust(`${ARCHIVE_BASE}/position_table/table${year}.html`),{cache:"no-store"});
+    if(!res.ok) throw new Error("HTTP "+res.status);
+    const html=await res.text();
+    const doc=new DOMParser().parseFromString(html,"text/html");
+    const yy=String(year).slice(-2);
+    const storms=new Map();
+    doc.querySelectorAll('a[href*="/typhoon/data/T"],a[href*="../data/T"],a[href*="data/T"]').forEach(a=>{
+      const href=a.getAttribute("href")||"";
+      const m=href.match(/T(\d{2})(\d{2})\.pdf/i);
+      if(!m || m[1]!==yy) return;
+      const code=m[1]+m[2];
+      const context=(a.closest("li")?.textContent || a.parentElement?.textContent || a.textContent || "").replace(/\s+/g," ").trim();
+      const provisional=context.includes("※");
+      storms.set(code,{
+        provisional,
+        pdf:new URL(href,`${ARCHIVE_BASE}/position_table/table${year}.html`).href
+      });
+    });
+    return storms;
+  }
   function updateArchiveLinks(){
     const year=archiveYear.value;
     const storm=archiveStormSelect.value;
@@ -304,8 +326,23 @@
     updateArchiveLinks();
     const rows=archiveRows.filter(r=>String(r[4])===storm);
     if(!rows.length){
-      setMessage("선택한 태풍의 확정 경로 데이터가 없습니다. 아래 JMA 공식 경로도 버튼으로 확인할 수 있습니다.");
-      sideCard.hidden=true;
+      const meta=archiveStormMeta.get(storm);
+      const provisional=meta?.provisional;
+      setMessage(provisional
+        ? "이 태풍은 JMA 속보 분석 자료입니다. 확정 CSV 전이라 지도 재생은 아직 없으며, 공식 경로도·위치표 PDF에서 최신 과거 경로를 확인할 수 있습니다."
+        : "선택한 태풍의 확정 경로 데이터가 없습니다. 아래 JMA 공식 경로도·위치표 PDF에서 확인할 수 있습니다.");
+      archiveLayer.clearLayers();
+      sideCard.hidden=false;
+      sideName.textContent=`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호`;
+      sideCode.textContent=provisional ? "JMA QUICK ANALYSIS · 속보" : "JMA ARCHIVE";
+      sidePressure.textContent="—";
+      sideWind.textContent="—";
+      sideMove.textContent=provisional ? "속보 경로" : "과거 경로";
+      sideSpeed.textContent="JMA 공식 자료";
+      sideList.innerHTML=`<div class="jma-archive-actions"><a class="jma-link-button" href="${routeLink.href}" target="_blank" rel="noopener">JMA 경로도 ↗</a><a class="jma-link-button" href="${pdfLink.href}" target="_blank" rel="noopener">위치표 PDF ↗</a></div>`;
+      mapTitle.textContent=`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호`;
+      mapDescription.textContent=provisional ? "JMA 속보 분석 · 공식 경로도 연결" : "JMA 과거 자료";
+      setStatus(`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 · ${provisional?"속보":"과거"}`,"ok");
       return;
     }
     setMessage("");
@@ -342,20 +379,35 @@
     setMessage("");
     archiveStormSelect.innerHTML='<option value="">불러오는 중…</option>';
     try{
-      archiveRows=await fetchArchiveCsv(year);
+      const [csvRows,indexStorms]=await Promise.all([
+        fetchArchiveCsv(year).catch(()=>[]),
+        fetchArchiveIndex(year).catch(()=>new Map())
+      ]);
+      archiveRows=csvRows;
       archiveYearLoaded=year;
       const storms=new Map();
-      archiveRows.forEach(r=>{ if(!storms.has(String(r[4]))) storms.set(String(r[4]),r[5]||""); });
+      archiveStormMeta=new Map(indexStorms);
+      archiveRows.forEach(r=>{
+        const no=String(r[4]);
+        if(!storms.has(no)) storms.set(no,r[5]||"");
+        const existing=archiveStormMeta.get(no)||{};
+        archiveStormMeta.set(no,{...existing,provisional:false});
+      });
+      archiveStormMeta.forEach((meta,no)=>{ if(!storms.has(no)) storms.set(no,""); });
       archiveStormSelect.innerHTML="";
       [...storms.entries()].sort((a,b)=>a[0].localeCompare(b[0])).forEach(([no,name])=>{
-        const o=document.createElement("option");o.value=no;o.textContent=`태풍 ${Number(no.slice(-2))}호${name?" · "+name:""}`;archiveStormSelect.appendChild(o);
+        const meta=archiveStormMeta.get(no);
+        const o=document.createElement("option");
+        o.value=no;
+        o.textContent=`태풍 ${Number(no.slice(-2))}호${name?" · "+name:""}${meta?.provisional?" · 속보":""}`;
+        archiveStormSelect.appendChild(o);
       });
       if(!storms.size) throw new Error("no archive rows");
-      archiveStormSelect.value=[...storms.keys()].at(-1);
+      archiveStormSelect.value=[...storms.keys()].sort().at(-1);
       renderArchiveStorm();
     }catch(err){
       console.error(err);
-      archiveRows=[]; archiveYearLoaded=year;
+      archiveRows=[]; archiveStormMeta=new Map(); archiveYearLoaded=year;
       archiveStormSelect.innerHTML='<option value="">공식 경로도에서 선택</option>';
       updateArchiveLinks();
       archiveLayer.clearLayers();
