@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="기상청 공식 통계와 Windy 지도를 함께 보는 동북아 태풍 대시보드">
+  <title>동북아 태풍 아카이브</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111f;
+      --panel: rgba(15, 31, 50, 0.88);
+      --panel-strong: #10243a;
+      --line: rgba(154, 184, 214, 0.18);
+      --text: #f4f8fc;
+      --muted: #a9bacb;
+      --cyan: #59d8ff;
+      --blue: #3887ff;
+      --yellow: #ffc85c;
+      --red: #ff6e7f;
+      --green: #65e4b5;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 9% 4%, rgba(56, 135, 255, 0.18), transparent 32rem),
+        radial-gradient(circle at 88% 15%, rgba(89, 216, 255, 0.12), transparent 25rem),
+        var(--bg);
+      color: var(--text);
+      font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", system-ui, sans-serif;
+    }
+
+    a { color: inherit; }
+    button, select { font: inherit; }
+
+    .shell {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 13px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      aspect-ratio: 1;
+      border: 1px solid rgba(89, 216, 255, 0.4);
+      border-radius: 15px;
+      background: linear-gradient(145deg, rgba(89,216,255,.24), rgba(56,135,255,.08));
+      box-shadow: inset 0 0 25px rgba(89,216,255,.12);
+      font-size: 22px;
+    }
+
+    h1 { margin: 0; font-size: clamp(1.15rem, 3vw, 1.55rem); letter-spacing: -.04em; }
+    .eyebrow { margin: 2px 0 0; color: var(--muted); font-size: .78rem; }
+
+    .actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.055);
+      color: var(--text);
+      text-decoration: none;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+    .button:hover { transform: translateY(-1px); border-color: rgba(89,216,255,.48); }
+    .button.primary { background: linear-gradient(135deg, #1a7af2, #30b6d7); border-color: transparent; }
+
+    .notice {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px 17px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(101, 228, 181, .28);
+      border-radius: 14px;
+      background: rgba(30, 101, 80, .16);
+      color: #dffbf0;
+      font-size: .9rem;
+    }
+    .status { display: inline-flex; align-items: center; gap: 8px; font-weight: 750; }
+    .status::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: var(--green); box-shadow: 0 0 15px var(--green); }
+    .sync { color: #a8d6c6; font-size: .78rem; }
+
+    .layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(310px, .8fr); gap: 16px; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 19px 20px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .panel-head h2 { margin: 0; font-size: 1.02rem; letter-spacing: -.02em; }
+    .panel-head p { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
+    .badge { padding: 7px 10px; border-radius: 999px; background: rgba(89,216,255,.11); color: var(--cyan); font-size: .72rem; white-space: nowrap; }
+
+    .map-wrap { position: relative; height: min(61vh, 650px); min-height: 430px; background: #0b1d2d; }
+    .map-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .map-label {
+      position: absolute;
+      z-index: 2;
+      left: 14px;
+      bottom: 14px;
+      max-width: calc(100% - 28px);
+      padding: 9px 11px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 10px;
+      background: rgba(6,17,31,.82);
+      color: #cce0ef;
+      font-size: .72rem;
+      pointer-events: none;
+    }
+
+    .side { display: grid; gap: 16px; align-content: start; }
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 16px; }
+    .stat {
+      min-height: 114px;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: linear-gradient(145deg, rgba(255,255,255,.06), rgba(255,255,255,.018));
+    }
+    .stat small { display: block; color: var(--muted); line-height: 1.45; }
+    .stat strong { display: block; margin-top: 10px; font-size: 1.8rem; letter-spacing: -.06em; }
+    .stat strong span { margin-left: 4px; color: var(--muted); font-size: .72rem; font-weight: 550; letter-spacing: 0; }
+
+    .source-card { padding: 18px; }
+    .source-card h3 { margin: 0 0 9px; font-size: .95rem; }
+    .source-card p { margin: 0 0 15px; color: var(--muted); font-size: .82rem; line-height: 1.65; }
+    .source-link { width: 100%; background: rgba(56,135,255,.13); border-color: rgba(56,135,255,.35); color: #cfe3ff; }
+
+    .chart-panel { margin-top: 16px; }
+    .chart-tools { display: flex; align-items: center; gap: 8px; }
+    .legend { display: flex; gap: 13px; color: var(--muted); font-size: .72rem; }
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .legend i { width: 8px; height: 8px; border-radius: 3px; background: var(--blue); }
+    .legend .impact i { background: var(--yellow); }
+    .chart {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(34px, 1fr));
+      align-items: end;
+      gap: 10px;
+      min-height: 285px;
+      padding: 30px 22px 20px;
+      overflow-x: auto;
+    }
+    .month { min-width: 34px; text-align: center; }
+    .bars { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 205px; }
+    .bar { width: 13px; min-height: 2px; border-radius: 6px 6px 2px 2px; background: linear-gradient(#55a5ff, #2765dd); box-shadow: 0 0 16px rgba(56,135,255,.18); }
+    .bar.impact { width: 8px; background: linear-gradient(#ffe084, #eea52b); box-shadow: 0 0 14px rgba(255,200,92,.16); }
+    .month-label { margin-top: 9px; color: var(--muted); font-size: .69rem; }
+    .month-value { margin-top: 4px; color: #c9d6e3; font-size: .66rem; }
+
+    .footnote {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 13px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .72rem;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .map-wrap { min-height: 480px; }
+      .side { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 620px) {
+      .shell { padding: 14px; }
+      header { align-items: flex-start; }
+      .actions .official { display: none; }
+      .notice { align-items: flex-start; flex-direction: column; gap: 6px; }
+      .side { grid-template-columns: 1fr; }
+      .map-wrap { min-height: 430px; height: 58vh; }
+      .panel-head { padding: 16px; }
+      .panel-head.chart-heading { display: grid; }
+      .footnote { flex-direction: column; gap: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">◉</div>
+        <div>
+          <h1>동북아 태풍 아카이브</h1>
+          <p class="eyebrow">Northeast Asia Typhoon Monitor</p>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="button official" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer">기상청 원문 ↗</a>
+        <button class="button primary" id="refreshMap" type="button">지도 새로고침</button>
+      </div>
+    </header>
+
+    <section class="notice" aria-label="데이터 연결 상태">
+      <span class="status">기상청 태풍발생현황 통계를 공식 출처로 등록했습니다.</span>
+      <span class="sync" id="syncTime">화면 동기화 시각 확인 중</span>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>동북아 바람·기압 지도</h2>
+            <p>한국·일본·중국 동부·대만·필리핀 해역</p>
+          </div>
+          <span class="badge">WINDY</span>
+        </div>
+        <div class="map-wrap">
+          <iframe
+            id="windyMap"
+            title="동북아시아 Windy 바람 지도"
+            loading="eager"
+            allowfullscreen
+            src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=m%2Fs&zoom=4&overlay=wind&product=gfs&level=surface&lat=29.5&lon=132.5&pressure=true&message=true">
+          </iframe>
+          <div class="map-label">지도는 Windy 예보 시각화를 사용합니다. 태풍 공식 판정과 통계는 기상청 자료를 기준으로 합니다.</div>
+        </div>
+      </article>
+
+      <aside class="side">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>태풍 평년값</h2>
+              <p>1991–2020년 기상청 기준</p>
+            </div>
+            <span class="badge">KMA</span>
+          </div>
+          <div class="stats">
+            <div class="stat">
+              <small>북서태평양<br>연평균 발생</small>
+              <strong>25.1<span>개</span></strong>
+            </div>
+            <div class="stat">
+              <small>우리나라<br>연평균 영향</small>
+              <strong>3.4<span>개</span></strong>
+            </div>
+            <div class="stat">
+              <small>발생 최다월</small>
+              <strong>8<span>월</span></strong>
+            </div>
+            <div class="stat">
+              <small>8월 평균<br>발생 태풍</small>
+              <strong>5.6<span>개</span></strong>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel source-card">
+          <h3>공식 데이터 출처</h3>
+          <p>월별·연도별 태풍 발생 수와 괄호 안의 우리나라 영향 태풍 수는 기상청 날씨누리의 태풍발생현황 통계를 기준으로 합니다.</p>
+          <a class="button source-link" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer">기상청 태풍발생현황 통계 열기 ↗</a>
+        </article>
+      </aside>
+    </section>
+
+    <section class="panel chart-panel">
+      <div class="panel-head chart-heading">
+        <div>
+          <h2>월별 태풍 발생 평년값</h2>
+          <p>막대 높이는 1991–2020년 월평균 횟수입니다.</p>
+        </div>
+        <div class="legend" aria-label="그래프 범례">
+          <span><i></i>전체 발생</span>
+          <span class="impact"><i></i>한국 영향</span>
+        </div>
+      </div>
+      <div class="chart" id="monthlyChart" role="img" aria-label="기상청 월별 태풍 발생 및 한국 영향 평년값 그래프"></div>
+      <div class="footnote">
+        <span>※ 한국 영향 값은 기상청 통계표의 괄호 안 수치입니다.</span>
+        <span>출처: 기상청 날씨누리 · 태풍발생현황 통계</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const monthlyNormals = [
+      { month: 1, total: 0.3, impact: 0 },
+      { month: 2, total: 0.3, impact: 0 },
+      { month: 3, total: 0.3, impact: 0 },
+      { month: 4, total: 0.6, impact: 0 },
+      { month: 5, total: 1.0, impact: 0 },
+      { month: 6, total: 1.7, impact: 0.3 },
+      { month: 7, total: 3.7, impact: 1.0 },
+      { month: 8, total: 5.6, impact: 1.2 },
+      { month: 9, total: 5.1, impact: 0.8 },
+      { month: 10, total: 3.5, impact: 0.1 },
+      { month: 11, total: 2.1, impact: 0 },
+      { month: 12, total: 1.0, impact: 0 }
+    ];
+
+    const chart = document.querySelector("#monthlyChart");
+    const max = Math.max(...monthlyNormals.map(item => item.total));
+
+    monthlyNormals.forEach(item => {
+      const column = document.createElement("div");
+      column.className = "month";
+      column.title = `${item.month}월: 전체 ${item.total}개, 한국 영향 ${item.impact}개`;
+      column.innerHTML = `
+        <div class="bars">
+          <div class="bar" style="height:${Math.max(2, item.total / max * 100)}%" aria-hidden="true"></div>
+          <div class="bar impact" style="height:${Math.max(2, item.impact / max * 100)}%" aria-hidden="true"></div>
+        </div>
+        <div class="month-label">${item.month}월</div>
+        <div class="month-value">${item.total}</div>
+      `;
+      chart.appendChild(column);
+    });
+
+    const syncTime = document.querySelector("#syncTime");
+    const updateSyncTime = () => {
+      syncTime.textContent = `화면 동기화 ${new Intl.DateTimeFormat("ko-KR", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      }).format(new Date())}`;
+    };
+
+    document.querySelector("#refreshMap").addEventListener("click", event => {
+      const button = event.currentTarget;
+      const frame = document.querySelector("#windyMap");
+      const url = new URL(frame.src);
+      url.searchParams.set("refresh", Date.now());
+      button.textContent = "새로 불러오는 중…";
+      button.disabled = true;
+      frame.addEventListener("load", () => {
+        button.textContent = "지도 새로고침";
+        button.disabled = false;
+        updateSyncTime();
+      }, { once: true });
+      frame.src = url.toString();
+    });
+
+    updateSyncTime();
+  </script>
+</body>
+</html>
+
+
