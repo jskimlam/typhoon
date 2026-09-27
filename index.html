@@ -803,7 +803,7 @@
       <div class="alert-icon" aria-hidden="true">!</div>
       <div class="alert-copy">
         <h2 id="seasonRiskTitle">태풍 시즌 · 석유화학 공급망 주의</h2>
-        <p>7~9월은 태풍 발생과 한국 영향이 집중되는 시기입니다. 항만 하역, 선박 운항, 원료 조달과 제품 출하 일정에 지연 가능성을 반영해 사전 여유를 확보하세요.</p>
+        <p>7~10월은 북서태평양 태풍 활동이 이어지는 주요 시즌이며, 7~9월은 특히 발생과 한국 영향이 집중되는 시기입니다. 항만 하역, 선박 운항, 원료 조달과 제품 출하 일정에 지연 가능성을 반영해 사전 여유를 확보하세요.</p>
       </div>
       <div class="risk-status" id="riskStatus">
         <small id="riskMonth">현재 월 기준</small>
@@ -849,12 +849,12 @@
         <div class="summary-item"><small id="totalLabel">연평균 발생</small><strong id="summaryTotal">—</strong></div>
         <div class="summary-item"><small id="impactLabel">연평균 한국 영향</small><strong id="summaryImpact">—</strong></div>
         <div class="summary-item"><small>발생 최다월</small><strong id="summaryPeak">—</strong></div>
-        <div class="summary-item"><small>7–9월 / 전체</small><strong id="summarySeasonRate">—</strong></div>
+        <div class="summary-item"><small>7–10월 / 전체</small><strong id="summarySeasonRate">—</strong></div>
         <div class="summary-item"><small>한국 영향 / 전체</small><strong id="summaryRate">—</strong></div>
       </div>
       <div class="chart" id="monthlyChart" role="img" aria-label="기상청 월별 태풍 발생 및 한국 영향 평년값 그래프"></div>
       <div class="season-scale" aria-label="월별 태풍 시즌 주의 단계">
-        <div class="season-scale-head"><span>연간 태풍 시즌 주의 구간</span><span>7–9월 집중 관리</span></div>
+        <div class="season-scale-head"><span>연간 태풍 시즌 주의 구간</span><span>7–10월 태풍 시즌</span></div>
         <div class="season-months" id="seasonMonths"></div>
       </div>
       <div class="footnote">
@@ -901,7 +901,7 @@
         const totalHeight = Math.max(2, item.total / max * 100);
         const impactHeight = Math.max(2, item.impact / max * 100);
         const column = document.createElement("div");
-        column.className = `month${item.month >= 7 && item.month <= 9 ? " peak-season" : ""}`;
+        column.className = `month${item.month >= 7 && item.month <= 10 ? " peak-season" : ""}`;
         column.title = `${item.month}월: 전체 ${formatNumber(item.total)}개, 한국 영향 ${formatNumber(item.impact)}개`;
         column.innerHTML = `
           <div class="bars">
@@ -924,7 +924,7 @@
     function updateSummary(items, total, impact, isAverage, label, metrics = {}) {
       const peak = items.reduce((best, item) => item.total > best.total ? item : best, items[0]);
       const seasonTotal = items
-        .filter(item => item.month >= 7 && item.month <= 9)
+        .filter(item => item.month >= 7 && item.month <= 10)
         .reduce((sum, item) => sum + Number(item.total || 0), 0);
       const seasonShare = total ? seasonTotal / total * 100 : 0;
       const impactShare = Number.isFinite(metrics.impactShare) ? metrics.impactShare : (
