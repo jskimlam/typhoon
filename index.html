@@ -317,7 +317,7 @@
     .range-fields[hidden], .single-field[hidden] { display: none; }
     .period-summary {
       display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
       padding: 4px 20px 0;
     }
@@ -332,9 +332,8 @@
     .summary-item::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--blue); }
     .summary-item:nth-child(2)::before { background: var(--yellow); }
     .summary-item:nth-child(3)::before { background: var(--cyan); }
-    .summary-item:nth-child(4)::before { background: var(--cyan); }
-    .summary-item:nth-child(5)::before { background: var(--yellow); }
-    .summary-item:nth-child(6)::before { background: var(--red); }
+    .summary-item:nth-child(4)::before { background: var(--yellow); }
+    .summary-item:nth-child(5)::before { background: var(--red); }
     .summary-item small { display: block; color: var(--muted); font-size: .7rem; }
     .summary-item strong { display: block; margin-top: 7px; font-size: 1.35rem; letter-spacing: -.04em; }
     .legend { display: flex; gap: 13px; color: var(--muted); font-size: .72rem; }
@@ -850,9 +849,8 @@
         <div class="summary-item"><small id="totalLabel">연평균 발생</small><strong id="summaryTotal">—</strong></div>
         <div class="summary-item"><small id="impactLabel">연평균 한국 영향</small><strong id="summaryImpact">—</strong></div>
         <div class="summary-item"><small>발생 최다월</small><strong id="summaryPeak">—</strong></div>
-        <div class="summary-item"><small>전체 발생 평년비</small><strong id="summaryWholeRate">—</strong></div>
-        <div class="summary-item"><small>7–9월 시즌 평년비</small><strong id="summarySeasonRate">—</strong></div>
-        <div class="summary-item"><small>한국 영향 평년비</small><strong id="summaryRate">—</strong></div>
+        <div class="summary-item"><small>7–9월 / 전체</small><strong id="summarySeasonRate">—</strong></div>
+        <div class="summary-item"><small>한국 영향 / 전체</small><strong id="summaryRate">—</strong></div>
       </div>
       <div class="chart" id="monthlyChart" role="img" aria-label="기상청 월별 태풍 발생 및 한국 영향 평년값 그래프"></div>
       <div class="season-scale" aria-label="월별 태풍 시즌 주의 단계">
@@ -860,7 +858,7 @@
         <div class="season-months" id="seasonMonths"></div>
       </div>
       <div class="footnote">
-        <span>※ 한국 영향 값은 기상청 통계표의 괄호 안 수치입니다.</span>
+        <span>※ %는 구성비입니다. 한국 영향 자료가 비어 있는 연도는 한국 영향 비중 계산에서 제외합니다.</span>
         <span>출처: 기상청 날씨누리 · 태풍발생현황 통계</span>
       </div>
     </section>
@@ -891,9 +889,9 @@
     const singleField = document.querySelector("#singleField");
     let annualData = [];
 
-    const NORMAL_ANNUAL_TOTAL = 25.1;
-    const NORMAL_KOREA_IMPACT = 3.4;
-    const NORMAL_SEASON_TOTAL = 14.4;
+    const DEFAULT_START_YEAR = 2023;
+    const DEFAULT_END_YEAR = 2025;
+    const FALLBACK_RECENT_YEARS = [{"year":2023,"months":[{"total":0,"impact":0},{"total":0,"impact":0},{"total":0,"impact":0},{"total":1,"impact":0},{"total":1,"impact":0},{"total":1,"impact":0},{"total":3,"impact":1},{"total":6,"impact":0},{"total":2,"impact":0},{"total":2,"impact":0},{"total":0,"impact":0},{"total":1,"impact":0}],"total":17,"impact":1},{"year":2024,"months":[{"total":0,"impact":0},{"total":0,"impact":0},{"total":0,"impact":0},{"total":0,"impact":0},{"total":2,"impact":0},{"total":0,"impact":0},{"total":2,"impact":0},{"total":6,"impact":2},{"total":8,"impact":0},{"total":3,"impact":0},{"total":4,"impact":0},{"total":1,"impact":0}],"total":26,"impact":2},{"year":2025,"months":[{"total":0,"impact":0},{"total":0,"impact":0},{"total":0,"impact":0},{"total":0,"impact":0},{"total":0,"impact":0},{"total":2,"impact":0},{"total":7,"impact":0},{"total":5,"impact":0},{"total":6,"impact":0},{"total":4,"impact":0},{"total":3,"impact":0},{"total":0,"impact":0}],"total":27,"impact":null}];
     const formatNumber = value => Number.isInteger(value) ? String(value) : value.toFixed(1);
 
     function renderChart(items) {
@@ -923,52 +921,61 @@
       });
     }
 
-    function updateSummary(items, total, impact, isAverage, label) {
+    function updateSummary(items, total, impact, isAverage, label, metrics = {}) {
       const peak = items.reduce((best, item) => item.total > best.total ? item : best, items[0]);
+      const seasonTotal = items
+        .filter(item => item.month >= 7 && item.month <= 9)
+        .reduce((sum, item) => sum + Number(item.total || 0), 0);
+      const seasonShare = total ? seasonTotal / total * 100 : 0;
+      const impactShare = Number.isFinite(metrics.impactShare) ? metrics.impactShare : (
+        impact != null && Number.isFinite(Number(impact)) && total ? Number(impact) / Number(total) * 100 : null
+      );
+
       document.querySelector("#chartDescription").textContent = `${label} · 파란색 전체 발생, 노란색 한국 영향`;
-      chart.setAttribute("aria-label", `${label} 월별 태풍 통계. ${items.map(item => `${item.month}월 전체 ${formatNumber(item.total)}개, 한국 영향 ${formatNumber(item.impact)}개`).join(". ")}`);
+      chart.setAttribute("aria-label", `${label} 월별 태풍 통계. ${items.map(item => `${item.month}월 전체 ${formatNumber(item.total)}개, 한국 영향 ${formatNumber(Number(item.impact) || 0)}개`).join(". ")}`);
       document.querySelector("#totalLabel").textContent = isAverage ? "연평균 발생" : "연간 발생";
       document.querySelector("#impactLabel").textContent = isAverage ? "연평균 한국 영향" : "연간 한국 영향";
       document.querySelector("#summaryTotal").textContent = `${formatNumber(total)}개`;
-      document.querySelector("#summaryImpact").textContent = `${formatNumber(impact)}개`;
+      document.querySelector("#summaryImpact").textContent = impact == null ? "자료 없음" : `${formatNumber(Number(impact))}개`;
       document.querySelector("#summaryPeak").textContent = `${peak.month}월 · ${formatNumber(peak.total)}개`;
-      const wholeRate = NORMAL_ANNUAL_TOTAL ? total / NORMAL_ANNUAL_TOTAL * 100 : 0;
-      const impactNormalRate = NORMAL_KOREA_IMPACT ? impact / NORMAL_KOREA_IMPACT * 100 : 0;
-      const seasonTotal = items.filter(item => item.month >= 7 && item.month <= 9).reduce((sum, item) => sum + Number(item.total || 0), 0);
-      const seasonRate = NORMAL_SEASON_TOTAL ? seasonTotal / NORMAL_SEASON_TOTAL * 100 : 0;
-      document.querySelector("#summaryWholeRate").textContent = `${wholeRate.toFixed(1)}%`;
-      document.querySelector("#summarySeasonRate").textContent = `${seasonRate.toFixed(1)}%`;
-      document.querySelector("#summaryRate").textContent = `${impactNormalRate.toFixed(1)}%`;
+      document.querySelector("#summarySeasonRate").textContent = `${seasonShare.toFixed(1)}%`;
+      document.querySelector("#summaryRate").textContent = impactShare == null ? "자료 없음" : `${impactShare.toFixed(1)}%`;
+
       window.__typhoonExportState = {
-        items: items.map(item => ({ month: item.month, total: Number(item.total), impact: Number(item.impact) })),
+        items: items.map(item => ({ month: item.month, total: Number(item.total), impact: Number(item.impact) || 0 })),
         total: Number(total),
-        impact: Number(impact),
+        impact: impact == null ? null : Number(impact),
         isAverage,
         label,
         totalLabel: isAverage ? "연평균 발생" : "연간 발생",
         impactLabel: isAverage ? "연평균 한국 영향" : "연간 한국 영향",
-        normalAnnualTotal: NORMAL_ANNUAL_TOTAL,
-        normalKoreaImpact: NORMAL_KOREA_IMPACT,
-        normalSeasonTotal: NORMAL_SEASON_TOTAL,
-        wholeRate,
         seasonTotal,
-        seasonRate,
-        impactNormalRate,
+        seasonShare,
+        impactShare,
+        impactCoverage: metrics.impactCoverage || "",
         currentMonth: new Date().getMonth() + 1
       };
       renderChart(items);
     }
 
     function renderSelection() {
-      if (!annualData.length) {
-        updateSummary(monthlyNormals, 25.1, 3.4, true, "1991–2020년 기상청 평년값");
-        return;
-      }
+      if (!annualData.length) return;
 
       if (viewMode.value === "single") {
         const record = annualData.find(item => item.year === Number(singleYear.value)) || annualData.at(-1);
         const items = record.months.map((month, index) => ({ month: index + 1, ...month }));
-        updateSummary(items, record.total, record.impact, false, `${record.year}년 기상청 통계`);
+        const impactKnown = record.impact != null && Number.isFinite(Number(record.impact));
+        updateSummary(
+          items,
+          Number(record.total),
+          impactKnown ? Number(record.impact) : null,
+          false,
+          `${record.year}년 기상청 통계`,
+          {
+            impactShare: impactKnown && Number(record.total) ? Number(record.impact) / Number(record.total) * 100 : null,
+            impactCoverage: impactKnown ? `${record.year}년` : ""
+          }
+        );
         return;
       }
 
@@ -976,14 +983,35 @@
       let to = Number(endYear.value);
       if (from > to) [from, to] = [to, from];
       const selected = annualData.filter(item => item.year >= from && item.year <= to);
+      if (!selected.length) return;
+
+      const impactAvailable = selected.filter(item => item.impact != null && Number.isFinite(Number(item.impact)));
       const items = Array.from({ length: 12 }, (_, index) => ({
         month: index + 1,
-        total: selected.reduce((sum, item) => sum + item.months[index].total, 0) / selected.length,
-        impact: selected.reduce((sum, item) => sum + item.months[index].impact, 0) / selected.length
+        total: selected.reduce((sum, item) => sum + Number(item.months[index].total || 0), 0) / selected.length,
+        impact: impactAvailable.length
+          ? impactAvailable.reduce((sum, item) => sum + Number(item.months[index].impact || 0), 0) / impactAvailable.length
+          : 0
       }));
-      const total = selected.reduce((sum, item) => sum + item.total, 0) / selected.length;
-      const impact = selected.reduce((sum, item) => sum + item.impact, 0) / selected.length;
-      updateSummary(items, total, impact, true, `${from}–${to}년 ${selected.length}개 연도 평균`);
+      const total = selected.reduce((sum, item) => sum + Number(item.total || 0), 0) / selected.length;
+      const impact = impactAvailable.length
+        ? impactAvailable.reduce((sum, item) => sum + Number(item.impact || 0), 0) / impactAvailable.length
+        : null;
+      const impactTotalDenominator = impactAvailable.reduce((sum, item) => sum + Number(item.total || 0), 0);
+      const impactTotalNumerator = impactAvailable.reduce((sum, item) => sum + Number(item.impact || 0), 0);
+      const impactShare = impactTotalDenominator ? impactTotalNumerator / impactTotalDenominator * 100 : null;
+      const coverage = impactAvailable.length
+        ? `${impactAvailable[0].year}–${impactAvailable.at(-1).year} 가용자료`
+        : "";
+
+      updateSummary(
+        items,
+        total,
+        impact,
+        true,
+        `${from}–${to}년 ${selected.length}개 연도 평균`,
+        { impactShare, impactCoverage: coverage }
+      );
     }
 
     function fillYearOptions() {
@@ -992,9 +1020,12 @@
       startYear.innerHTML = options;
       endYear.innerHTML = options;
       singleYear.innerHTML = options;
-      startYear.value = years.includes(2023) ? "2023" : String(years[Math.max(0, years.length - 3)]);
-      endYear.value = years.includes(2025) ? "2025" : String(years.at(-1));
-      singleYear.value = years.includes(2025) ? "2025" : String(years.at(-1));
+      viewMode.value = "average";
+      rangeFields.hidden = false;
+      singleField.hidden = true;
+      startYear.value = years.includes(DEFAULT_START_YEAR) ? String(DEFAULT_START_YEAR) : String(years[Math.max(0, years.length - 3)]);
+      endYear.value = years.includes(DEFAULT_END_YEAR) ? String(DEFAULT_END_YEAR) : String(years.at(-1));
+      singleYear.value = years.includes(DEFAULT_END_YEAR) ? String(DEFAULT_END_YEAR) : String(years.at(-1));
     }
 
     viewMode.addEventListener("change", () => {
@@ -1029,6 +1060,10 @@
       document.querySelector("#riskLevel").textContent = "평시 모니터링";
     }
 
+    annualData = FALLBACK_RECENT_YEARS;
+    fillYearOptions();
+    renderSelection();
+
     fetch("data/kma-annual.json")
       .then(response => {
         if (!response.ok) throw new Error("통계 데이터를 불러오지 못했습니다.");
@@ -1039,7 +1074,7 @@
         fillYearOptions();
         renderSelection();
       })
-      .catch(() => renderSelection());
+      .catch(() => { annualData = FALLBACK_RECENT_YEARS; fillYearOptions(); renderSelection(); });
 
     const syncTime = document.querySelector("#syncTime");
     const updateSyncTime = () => {
