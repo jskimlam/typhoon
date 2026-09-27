@@ -50,6 +50,7 @@
   let targetCache = [];
   let archiveRows = [];
   let archiveStormMeta = new Map();
+  let archivePdfTrackCache = new Map();
   let archiveYearLoaded = null;
   let standardBaseLayer = null;
   let satelliteBaseLayer = null;
@@ -313,6 +314,8 @@
     return storms;
   }
   async function fetchArchivePdfTrack(storm){
+    if(archivePdfTrackCache.has(storm)) return archivePdfTrackCache.get(storm);
+    const task=(async()=>{
     if(!window.pdfjsLib) throw new Error("PDF parser unavailable");
     const meta=archiveStormMeta.get(storm)||{};
     const url=meta.pdf || `${ARCHIVE_BASE}/data/T${storm}.pdf`;
@@ -393,7 +396,38 @@
     }
 
     return {rows,name,url};
+    })();
+    archivePdfTrackCache.set(storm,task);
+    try{return await task;}catch(err){archivePdfTrackCache.delete(storm);throw err;}
   }
+  function updateArchiveStormOption(no,name){
+    if(!name) return;
+    const meta=archiveStormMeta.get(no)||{};
+    archiveStormMeta.set(no,{...meta,name});
+    const option=[...archiveStormSelect.options].find(o=>o.value===no);
+    if(option) option.textContent=`태풍 ${Number(no.slice(-2))}호 · ${name}${meta.provisional?" · 속보":""}`;
+  }
+
+  async function hydrateArchiveStormNames(storms){
+    const targets=[...storms.keys()].filter(no=>{
+      const meta=archiveStormMeta.get(no);
+      return meta?.provisional && !meta?.name;
+    });
+    let cursor=0;
+    const worker=async()=>{
+      while(cursor<targets.length){
+        const no=targets[cursor++];
+        try{
+          const track=await fetchArchivePdfTrack(no);
+          if(track?.name) updateArchiveStormOption(no,track.name);
+        }catch(err){
+          console.warn("JMA archive name load failed",no,err);
+        }
+      }
+    };
+    await Promise.all(Array.from({length:Math.min(3,targets.length)},()=>worker()));
+  }
+
   function updateArchiveLinks(){
     const year=archiveYear.value;
     const storm=archiveStormSelect.value;
@@ -416,6 +450,7 @@
         try{
           const pdfTrack=await fetchArchivePdfTrack(storm);
           const pdfRows=pdfTrack.rows;
+          if(pdfTrack.name) updateArchiveStormOption(storm,pdfTrack.name);
           if(!pdfRows.length) throw new Error("no PDF track rows");
           const pts=pdfRows.map(r=>[r.lat,r.lon]).filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));
           if(pts.length>1){
@@ -522,12 +557,14 @@
         const meta=archiveStormMeta.get(no);
         const o=document.createElement("option");
         o.value=no;
-        o.textContent=`태풍 ${Number(no.slice(-2))}호${name?" · "+name:""}${meta?.provisional?" · 속보":""}`;
+        const displayName=name || meta?.name || "";
+        o.textContent=`태풍 ${Number(no.slice(-2))}호${displayName?" · "+displayName:""}${meta?.provisional?" · 속보":""}`;
         archiveStormSelect.appendChild(o);
       });
       if(!storms.size) throw new Error("no archive rows");
       archiveStormSelect.value=[...storms.keys()].sort().at(-1);
       renderArchiveStorm();
+      hydrateArchiveStormNames(storms);
     }catch(err){
       console.error(err);
       archiveRows=[]; archiveStormMeta=new Map(); archiveYearLoaded=year;
