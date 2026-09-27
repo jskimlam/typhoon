@@ -153,84 +153,53 @@
       display: block;
       transform-origin: top left;
     }
-    .map-wrap.is-locked iframe { pointer-events: none; }
-    .map-toolbar {
-      position: absolute;
-      z-index: 5;
-      top: 12px;
-      right: 12px;
+    .map-wrap iframe[hidden] { display: none; }
+    .map-tabs {
       display: flex;
-      gap: 7px;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(5,17,30,.64);
     }
-    .map-control {
-      min-height: 36px;
-      padding: 0 11px;
+    .map-tablist { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; flex: 1; }
+    .map-tab, .map-expand {
+      min-height: 40px;
+      padding: 0 12px;
       border: 1px solid rgba(255,255,255,.2);
       border-radius: 10px;
-      background: rgba(6,17,31,.88);
+      background: rgba(255,255,255,.045);
       color: #eef7ff;
       font: inherit;
-      font-size: .7rem;
+      font-size: .72rem;
       font-weight: 750;
-      box-shadow: 0 7px 18px rgba(0,0,0,.24);
       cursor: pointer;
     }
-    .map-control.lock { display: none; border-color: rgba(255,200,92,.42); color: #ffe18a; }
-    .map-wrap.is-interactive .map-control.lock { display: inline-flex; align-items: center; }
-    .map-gesture-guard {
-      position: absolute;
-      z-index: 4;
-      inset: 0;
-      display: none;
-      place-items: center;
-      width: 100%;
-      padding: 22px;
-      border: 0;
-      background: linear-gradient(rgba(3,12,22,.05), rgba(3,12,22,.38));
-      color: var(--text);
-      font: inherit;
-      text-align: center;
-      touch-action: pan-y;
-      cursor: pointer;
+    .map-tab[aria-selected="true"] {
+      border-color: transparent;
+      background: linear-gradient(135deg, #1b7cf2, #24a8d7);
+      box-shadow: 0 7px 20px rgba(30,130,235,.24);
     }
-    .map-wrap.is-locked .map-gesture-guard { display: grid; }
-    .map-gesture-guard span {
-      display: grid;
-      gap: 5px;
-      max-width: 250px;
-      padding: 13px 17px;
-      border: 1px solid rgba(89,216,255,.34);
-      border-radius: 14px;
-      background: rgba(6,17,31,.9);
-      color: #eaf7ff;
-      font-size: .82rem;
-      font-weight: 800;
-      box-shadow: 0 14px 34px rgba(0,0,0,.34);
-    }
-    .map-gesture-guard small { color: #9fb4c7; font-size: .67rem; font-weight: 550; line-height: 1.45; }
-    .map-wrap.is-expanded {
+    .map-expand { flex: 0 0 auto; color: #b9d9ef; }
+    .map-panel.is-expanded {
       position: fixed;
       z-index: 100;
       inset: 0;
       width: 100vw;
       height: 100dvh;
-      min-height: 0;
       border-radius: 0;
+      display: flex;
+      flex-direction: column;
     }
+    .map-panel.is-expanded .map-wrap { flex: 1; height: auto; min-height: 0; }
     body.map-expanded { overflow: hidden; }
     .map-label {
-      position: absolute;
-      z-index: 2;
-      left: 14px;
-      bottom: 14px;
-      max-width: calc(100% - 28px);
-      padding: 9px 11px;
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 10px;
-      background: rgba(6,17,31,.82);
+      padding: 10px 16px;
+      border-top: 1px solid var(--line);
+      background: rgba(6,17,31,.72);
       color: #cce0ef;
       font-size: .72rem;
-      pointer-events: none;
+      line-height: 1.55;
     }
 
     .side { display: grid; gap: 16px; align-content: start; }
@@ -477,9 +446,10 @@
       .notice { align-items: flex-start; flex-direction: column; gap: 6px; }
       .side { grid-template-columns: 1fr; }
       .map-wrap { min-height: 390px; height: clamp(390px, 58vh, 520px); }
-      .map-toolbar { top: 9px; right: 9px; }
-      .map-control { min-height: 38px; background: rgba(6,17,31,.93); }
-      .map-label { left: 9px; bottom: 9px; max-width: calc(100% - 18px); padding: 8px 10px; font-size: .65rem; }
+      .map-tabs { gap: 6px; padding: 9px; }
+      .map-tablist { gap: 5px; }
+      .map-tab, .map-expand { min-height: 42px; padding-inline: 8px; font-size: .68rem; }
+      .map-label { padding: 9px 12px; font-size: .65rem; }
       .panel-head { gap: 10px; padding: 16px; }
       .panel-head .badge { padding: 6px 8px; font-size: .63rem; }
       .panel-head.chart-heading { display: grid; }
@@ -513,8 +483,8 @@
       </div>
       <div class="actions">
         <a class="button official" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer">기상청 원문 ↗</a>
-        <a class="button" href="https://www.windy.com/hurricanes" target="_blank" rel="noopener noreferrer">Windy 태풍추적기 ↗</a>
-        <button class="button primary" id="refreshMap" type="button">태풍정보 새로고침</button>
+        <a class="button" href="https://www.ventusky.com/" target="_blank" rel="noopener noreferrer">Ventusky 열기 ↗</a>
+        <button class="button primary" id="refreshMap" type="button">지도 새로고침</button>
       </div>
     </header>
 
@@ -524,31 +494,39 @@
     </section>
 
     <section class="layout">
-      <article class="panel">
+      <article class="panel map-panel" id="mapPanel">
         <div class="panel-head">
           <div>
-            <h2>기상청 현재 태풍정보</h2>
-            <p>태풍 위치·예상 경로·강도·중심기압</p>
+            <h2 id="mapTitle">Ventusky 바람지도</h2>
+            <p id="mapDescription">실시간 바람·태풍 경로·날짜/시간</p>
           </div>
-          <span class="badge">KMA OFFICIAL</span>
+          <span class="badge" id="mapBadge">VENTUSKY LIVE</span>
+        </div>
+        <div class="map-tabs">
+          <div class="map-tablist" role="tablist" aria-label="태풍 지도 선택">
+            <button class="map-tab" id="ventuskyTab" type="button" role="tab" aria-selected="true" aria-controls="ventuskyFrame">Ventusky 바람지도</button>
+            <button class="map-tab" id="kmaTab" type="button" role="tab" aria-selected="false" aria-controls="weatherFrame">기상청 공식정보</button>
+          </div>
+          <button class="map-expand" id="expandMap" type="button" aria-pressed="false">전체화면</button>
         </div>
         <div class="map-wrap" id="mapWrap">
-          <div class="map-toolbar" aria-label="지도 보기 설정">
-            <button class="map-control lock" id="lockMap" type="button">지도 잠금</button>
-            <button class="map-control" id="expandMap" type="button" aria-pressed="false">화면 채우기</button>
-          </div>
+          <iframe
+            id="ventuskyFrame"
+            title="Ventusky 동북아시아 실시간 바람지도"
+            loading="eager"
+            allowfullscreen
+            src="https://embed.ventusky.com/?p=30;130;4&amp;l=wind-10m&amp;w=soft">
+          </iframe>
           <iframe
             id="weatherFrame"
             title="기상청 태풍 상세정보"
-            loading="eager"
+            loading="lazy"
             allowfullscreen
+            hidden
             src="https://www.weather.go.kr/w/typhoon/ko/weather/typhoon_02.jsp">
           </iframe>
-          <button class="map-gesture-guard" id="mapGestureGuard" type="button">
-            <span>눌러서 지도 조작<small>현재는 페이지 스크롤이 움직이지 않도록 지도를 잠갔습니다.</small></span>
-          </button>
-          <div class="map-label">기상청이 제공하는 공식 태풍 상세정보 화면입니다. 태풍 정보 종료 후에도 24시간 동안 표시될 수 있습니다.</div>
         </div>
+        <div class="map-label" id="mapLabel">Ventusky의 실시간 기상 시각화입니다. 태풍 대응 판단은 기상청 공식정보를 함께 확인하세요.</div>
       </article>
 
       <aside class="side">
@@ -809,22 +787,22 @@
       }).format(new Date())}`;
     };
 
+    const mapPanel = document.querySelector("#mapPanel");
     const mapWrap = document.querySelector("#mapWrap");
+    const ventuskyFrame = document.querySelector("#ventuskyFrame");
     const weatherFrame = document.querySelector("#weatherFrame");
-    const mapGestureGuard = document.querySelector("#mapGestureGuard");
-    const lockMapButton = document.querySelector("#lockMap");
+    const ventuskyTab = document.querySelector("#ventuskyTab");
+    const kmaTab = document.querySelector("#kmaTab");
     const expandMapButton = document.querySelector("#expandMap");
+    const mapTitle = document.querySelector("#mapTitle");
+    const mapDescription = document.querySelector("#mapDescription");
+    const mapBadge = document.querySelector("#mapBadge");
+    const mapLabel = document.querySelector("#mapLabel");
     const compactMapQuery = window.matchMedia("(max-width: 620px)");
-    const coarsePointerQuery = window.matchMedia("(pointer: coarse)");
-
-    const setMapLocked = locked => {
-      mapWrap.classList.toggle("is-locked", locked);
-      mapWrap.classList.toggle("is-interactive", !locked);
-    };
+    let activeMap = "ventusky";
 
     const layoutWeatherFrame = () => {
-      const useWidePreview = compactMapQuery.matches || (coarsePointerQuery.matches && mapWrap.classList.contains("is-expanded"));
-      if (!useWidePreview) {
+      if (!compactMapQuery.matches) {
         weatherFrame.style.width = "";
         weatherFrame.style.height = "";
         weatherFrame.style.transform = "";
@@ -838,51 +816,82 @@
       weatherFrame.style.transform = `scale(${scale})`;
     };
 
-    mapGestureGuard.addEventListener("click", () => setMapLocked(false));
-    lockMapButton.addEventListener("click", () => setMapLocked(true));
+    const mapViews = {
+      ventusky: {
+        frame: ventuskyFrame,
+        tab: ventuskyTab,
+        title: "Ventusky 바람지도",
+        description: "실시간 바람·태풍 경로·날짜/시간",
+        badge: "VENTUSKY LIVE",
+        label: "Ventusky의 실시간 기상 시각화입니다. 태풍 대응 판단은 기상청 공식정보를 함께 확인하세요."
+      },
+      kma: {
+        frame: weatherFrame,
+        tab: kmaTab,
+        title: "기상청 현재 태풍정보",
+        description: "태풍 위치·예상 경로·강도·중심기압",
+        badge: "KMA OFFICIAL",
+        label: "기상청이 제공하는 공식 태풍 상세정보 화면입니다. 태풍 정보 종료 후에도 24시간 동안 표시될 수 있습니다."
+      }
+    };
+
+    const setMapView = name => {
+      activeMap = name;
+      Object.entries(mapViews).forEach(([key, view]) => {
+        const selected = key === name;
+        view.frame.hidden = !selected;
+        view.tab.setAttribute("aria-selected", String(selected));
+        view.tab.tabIndex = selected ? 0 : -1;
+      });
+      const view = mapViews[name];
+      mapTitle.textContent = view.title;
+      mapDescription.textContent = view.description;
+      mapBadge.textContent = view.badge;
+      mapLabel.textContent = view.label;
+      requestAnimationFrame(layoutWeatherFrame);
+    };
+
+    ventuskyTab.addEventListener("click", () => setMapView("ventusky"));
+    kmaTab.addEventListener("click", () => setMapView("kma"));
     expandMapButton.addEventListener("click", () => {
-      const expanded = !mapWrap.classList.contains("is-expanded");
-      mapWrap.classList.toggle("is-expanded", expanded);
+      const expanded = !mapPanel.classList.contains("is-expanded");
+      mapPanel.classList.toggle("is-expanded", expanded);
       document.body.classList.toggle("map-expanded", expanded);
-      expandMapButton.textContent = expanded ? "원래 크기" : "화면 채우기";
+      expandMapButton.textContent = expanded ? "닫기" : "전체화면";
       expandMapButton.setAttribute("aria-pressed", String(expanded));
       requestAnimationFrame(layoutWeatherFrame);
     });
     document.addEventListener("keydown", event => {
-      if (event.key !== "Escape" || !mapWrap.classList.contains("is-expanded")) return;
-      mapWrap.classList.remove("is-expanded");
+      if (event.key !== "Escape" || !mapPanel.classList.contains("is-expanded")) return;
+      mapPanel.classList.remove("is-expanded");
       document.body.classList.remove("map-expanded");
-      expandMapButton.textContent = "화면 채우기";
+      expandMapButton.textContent = "전체화면";
       expandMapButton.setAttribute("aria-pressed", "false");
       requestAnimationFrame(layoutWeatherFrame);
     });
 
-    const applyMapMode = () => {
-      setMapLocked(compactMapQuery.matches || coarsePointerQuery.matches);
-      layoutWeatherFrame();
-    };
-    compactMapQuery.addEventListener?.("change", applyMapMode);
-    coarsePointerQuery.addEventListener?.("change", applyMapMode);
+    compactMapQuery.addEventListener?.("change", layoutWeatherFrame);
     if ("ResizeObserver" in window) {
       new ResizeObserver(layoutWeatherFrame).observe(mapWrap);
     } else {
       window.addEventListener("resize", layoutWeatherFrame);
     }
-    applyMapMode();
+    setMapView("ventusky");
 
     document.querySelector("#refreshMap").addEventListener("click", event => {
       const button = event.currentTarget;
-      const url = new URL(weatherFrame.src);
+      const frame = mapViews[activeMap].frame;
+      const url = new URL(frame.src);
       url.searchParams.set("refresh", Date.now());
       button.textContent = "새로 불러오는 중…";
       button.disabled = true;
-      weatherFrame.addEventListener("load", () => {
-        button.textContent = "태풍정보 새로고침";
+      frame.addEventListener("load", () => {
+        button.textContent = "지도 새로고침";
         button.disabled = false;
         updateSyncTime();
         layoutWeatherFrame();
       }, { once: true });
-      weatherFrame.src = url.toString();
+      frame.src = url.toString();
     });
 
     updateSyncTime();
