@@ -405,7 +405,7 @@
     const meta=archiveStormMeta.get(no)||{};
     archiveStormMeta.set(no,{...meta,name});
     const option=[...archiveStormSelect.options].find(o=>o.value===no);
-    if(option) option.textContent=`태풍 ${Number(no.slice(-2))}호 · ${name}${meta.provisional?" · 속보":""}`;
+    if(option) option.textContent=`태풍 ${Number(no.slice(-2))}호 · ${name}`;
   }
 
   async function hydrateArchiveStormNames(storms){
@@ -558,7 +558,7 @@
         const o=document.createElement("option");
         o.value=no;
         const displayName=name || meta?.name || "";
-        o.textContent=`태풍 ${Number(no.slice(-2))}호${displayName?" · "+displayName:""}${meta?.provisional?" · 속보":""}`;
+        o.textContent=`태풍 ${Number(no.slice(-2))}호${displayName?" · "+displayName:""}`;
         archiveStormSelect.appendChild(o);
       });
       if(!storms.size) throw new Error("no archive rows");
