@@ -134,6 +134,8 @@
     const impactLabel = escapeXml(state.impactLabel || (state.isAverage ? "연평균 한국 영향" : "연간 한국 영향"));
     const subtitle = escapeXml(state.label || "");
     const rate = Number(state.total) ? (Number(state.impact) / Number(state.total) * 100).toFixed(1) + "%" : "0%";
+    const normalAnnualTotal = Number(state.normalAnnualTotal) || 25.1;
+    const wholeRate = normalAnnualTotal ? (Number(state.total) / normalAnnualTotal * 100).toFixed(1) + "%" : "—";
     const peak = items.reduce((best, d) => Number(d.total) > Number(best.total) ? d : best, items[0]);
 
     const gridLines = [0, .25, .5, .75, 1].map(p => {
@@ -167,14 +169,17 @@
       {label: totalLabel, value: fmt(state.total) + "개", color:"#2F7FEA"},
       {label: impactLabel, value: fmt(state.impact) + "개", color:"#F2B638"},
       {label:"발생 최다월", value:`${peak.month}월 · ${fmt(peak.total)}개`, color:"#40BFEF"},
-      {label:"한국 영향 비율", value:rate, color:"#FF5874"}
+      {label:"전체 발생 평년비", value:wholeRate, color:"#35B9E8"},
+      {label:"한국 영향 / 전체", value:rate, color:"#FF5874"}
     ].map((k, i) => {
-      const x = 72 + i * 364;
+      const gap = 12;
+      const width = (1456 - gap * 4) / 5;
+      const x = 72 + i * (width + gap);
       return `
-        <rect x="${x}" y="146" width="346" height="104" rx="18" fill="${cardFill}" stroke="#D8E3EC"/>
+        <rect x="${x}" y="146" width="${width}" height="104" rx="18" fill="${cardFill}" stroke="#D8E3EC"/>
         <rect x="${x}" y="146" width="5" height="104" rx="3" fill="${k.color}"/>
-        <text x="${x+20}" y="179" class="kpiLabel">${escapeXml(k.label)}</text>
-        <text x="${x+20}" y="222" class="kpiValue">${escapeXml(k.value)}</text>
+        <text x="${x+18}" y="179" class="kpiLabel">${escapeXml(k.label)}</text>
+        <text x="${x+18}" y="222" class="kpiValue">${escapeXml(k.value)}</text>
       `;
     }).join("");
 
@@ -209,7 +214,7 @@
           .subtitle{font-size:18px;font-weight:600;fill:#6A8092}
           .eyebrow{font-size:13px;font-weight:900;fill:#7890A4;letter-spacing:2px}
           .kpiLabel{font-size:14px;font-weight:700;fill:#677E91}
-          .kpiValue{font-size:28px;font-weight:900;fill:#10263A}
+          .kpiValue{font-size:25px;font-weight:900;fill:#10263A}
           .value{font-size:14px;font-weight:900}.value.blue{fill:#17324A}.value.yellow{fill:#9A6500}
           .month{font-size:15px;font-weight:900;fill:#21394F}.monthSub{font-size:10px;font-weight:650;fill:#7A90A2}
           .legendText{font-size:14px;font-weight:750;fill:#536B7E}
