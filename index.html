@@ -218,6 +218,20 @@
     .stat strong { display: block; margin-top: 10px; font-size: 1.8rem; letter-spacing: -.06em; }
     .stat strong span { margin-left: 4px; color: var(--muted); font-size: .72rem; font-weight: 550; letter-spacing: 0; }
 
+    .archive-stats-actions { display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:flex-end; }
+    .archive-period-action {
+      min-height:30px;
+      padding:0 9px;
+      border:1px solid rgba(89,216,255,.25);
+      border-radius:9px;
+      background:rgba(89,216,255,.07);
+      color:#bfeeff;
+      font-size:.64rem;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .archive-period-action:hover { border-color:rgba(89,216,255,.5); background:rgba(89,216,255,.12); }
+
     .source-card { padding: 18px; }
     .source-card h3 { margin: 0 0 9px; font-size: .95rem; }
     .source-card p { margin: 0 0 15px; color: var(--muted); font-size: .82rem; line-height: 1.65; }
@@ -523,6 +537,8 @@
       .stat { min-height: 90px; padding: 11px; }
       .stat small { font-size: .68rem; }
       .stat strong { margin-top: 7px; font-size: 1.35rem; }
+      .archive-stats-actions { gap:5px; }
+      .archive-period-action { min-height:28px; padding-inline:7px; font-size:.58rem; }
       .source-card { padding: 14px; }
       .season-alert { margin-top: 11px; gap: 10px; padding: 13px; border-radius: 16px; }
       .alert-icon { width: 42px; border-radius: 12px; font-size: 1.1rem; }
@@ -762,30 +778,33 @@
           </div>
         </article>
 
-        <article class="panel">
+        <article class="panel" id="archiveStatsPanel">
           <div class="panel-head">
             <div>
-              <h2>태풍 평년값</h2>
-              <p>1991–2020년 기상청 기준</p>
+              <h2 id="archiveStatsTitle">선택기간 태풍 통계</h2>
+              <p id="archiveStatsPeriod">2023–2025년 기상청 아카이브</p>
             </div>
-            <span class="badge">KMA</span>
+            <div class="archive-stats-actions">
+              <span class="badge">KMA ARCHIVE</span>
+              <button class="archive-period-action" id="archiveStatsJump" type="button">기간 변경</button>
+            </div>
           </div>
           <div class="stats">
             <div class="stat">
-              <small>북서태평양<br>연평균 발생</small>
-              <strong>25.1<span>개</span></strong>
+              <small id="archiveStatTotalLabel">북서태평양<br>연평균 발생</small>
+              <strong id="archiveStatTotal">—<span>개</span></strong>
             </div>
             <div class="stat">
-              <small>우리나라<br>연평균 영향</small>
-              <strong>3.4<span>개</span></strong>
+              <small id="archiveStatImpactLabel">우리나라<br>연평균 영향</small>
+              <strong id="archiveStatImpact">—<span>개</span></strong>
             </div>
             <div class="stat">
               <small>발생 최다월</small>
-              <strong>8<span>월</span></strong>
+              <strong id="archiveStatPeakMonth">—<span>월</span></strong>
             </div>
             <div class="stat">
-              <small>8월 평균<br>발생 태풍</small>
-              <strong>5.6<span>개</span></strong>
+              <small id="archiveStatPeakValueLabel">최다월 평균<br>발생 태풍</small>
+              <strong id="archiveStatPeakValue">—<span>개</span></strong>
             </div>
           </div>
         </article>
@@ -887,6 +906,15 @@
     const singleYear = document.querySelector("#singleYear");
     const rangeFields = document.querySelector("#rangeFields");
     const singleField = document.querySelector("#singleField");
+    const archiveStatsPeriod = document.querySelector("#archiveStatsPeriod");
+    const archiveStatsJump = document.querySelector("#archiveStatsJump");
+    const archiveStatTotalLabel = document.querySelector("#archiveStatTotalLabel");
+    const archiveStatImpactLabel = document.querySelector("#archiveStatImpactLabel");
+    const archiveStatTotal = document.querySelector("#archiveStatTotal");
+    const archiveStatImpact = document.querySelector("#archiveStatImpact");
+    const archiveStatPeakMonth = document.querySelector("#archiveStatPeakMonth");
+    const archiveStatPeakValueLabel = document.querySelector("#archiveStatPeakValueLabel");
+    const archiveStatPeakValue = document.querySelector("#archiveStatPeakValue");
     let annualData = [];
 
     const DEFAULT_START_YEAR = 2023;
@@ -938,6 +966,16 @@
       document.querySelector("#summaryTotal").textContent = `${formatNumber(total)}개`;
       document.querySelector("#summaryImpact").textContent = impact == null ? "자료 없음" : `${formatNumber(Number(impact))}개`;
       document.querySelector("#summaryPeak").textContent = `${peak.month}월 · ${formatNumber(peak.total)}개`;
+
+      archiveStatsPeriod.textContent = label.replace(" 기상청 통계", "").replace(" 3개 연도 평균", " 평균");
+      archiveStatTotalLabel.innerHTML = isAverage ? "북서태평양<br>연평균 발생" : "북서태평양<br>연간 발생";
+      archiveStatImpactLabel.innerHTML = isAverage ? "우리나라<br>연평균 영향" : "우리나라<br>연간 영향";
+      archiveStatTotal.innerHTML = `${formatNumber(total)}<span>개</span>`;
+      archiveStatImpact.innerHTML = impact == null ? `—<span>자료 없음</span>` : `${formatNumber(Number(impact))}<span>개</span>`;
+      archiveStatPeakMonth.innerHTML = `${peak.month}<span>월</span>`;
+      archiveStatPeakValueLabel.innerHTML = isAverage ? `${peak.month}월 평균<br>발생 태풍` : `${peak.month}월<br>발생 태풍`;
+      archiveStatPeakValue.innerHTML = `${formatNumber(peak.total)}<span>개</span>`;
+
       document.querySelector("#summarySeasonRate").textContent = `${seasonShare.toFixed(1)}%`;
       document.querySelector("#summaryRate").textContent = impactShare == null ? "자료 없음" : `${impactShare.toFixed(1)}%`;
 
@@ -1027,6 +1065,11 @@
       endYear.value = years.includes(DEFAULT_END_YEAR) ? String(DEFAULT_END_YEAR) : String(years.at(-1));
       singleYear.value = years.includes(DEFAULT_END_YEAR) ? String(DEFAULT_END_YEAR) : String(years.at(-1));
     }
+
+    archiveStatsJump?.addEventListener("click", () => {
+      document.querySelector(".chart-panel")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      setTimeout(() => viewMode.focus({ preventScroll: true }), 450);
+    });
 
     viewMode.addEventListener("change", () => {
       const single = viewMode.value === "single";
