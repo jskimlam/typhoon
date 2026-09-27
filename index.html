@@ -162,7 +162,34 @@
     .source-link { width: 100%; background: rgba(56,135,255,.13); border-color: rgba(56,135,255,.35); color: #cfe3ff; }
 
     .chart-panel { margin-top: 16px; }
-    .chart-tools { display: flex; align-items: center; gap: 8px; }
+    .chart-tools { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .filters label { color: var(--muted); font-size: .72rem; }
+    .select {
+      min-height: 38px;
+      padding: 0 34px 0 11px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-strong);
+      color: var(--text);
+      cursor: pointer;
+    }
+    .range-fields { display: flex; align-items: center; gap: 7px; }
+    .range-fields[hidden], .single-field[hidden] { display: none; }
+    .period-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 16px 20px 0;
+    }
+    .summary-item {
+      padding: 13px 14px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255,255,255,.025);
+    }
+    .summary-item small { display: block; color: var(--muted); font-size: .7rem; }
+    .summary-item strong { display: block; margin-top: 6px; font-size: 1.15rem; }
     .legend { display: flex; gap: 13px; color: var(--muted); font-size: .72rem; }
     .legend span { display: inline-flex; align-items: center; gap: 6px; }
     .legend i { width: 8px; height: 8px; border-radius: 3px; background: var(--blue); }
@@ -198,6 +225,7 @@
       .layout { grid-template-columns: 1fr; }
       .map-wrap { min-height: 480px; }
       .side { grid-template-columns: 1fr 1fr; }
+      .period-summary { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 620px) {
@@ -209,6 +237,11 @@
       .map-wrap { min-height: 430px; height: 58vh; }
       .panel-head { padding: 16px; }
       .panel-head.chart-heading { display: grid; }
+      .chart-tools { align-items: flex-start; }
+      .filters { width: 100%; }
+      .select { flex: 1; }
+      .range-fields { width: 100%; }
+      .period-summary { padding: 12px 14px 0; }
       .footnote { flex-direction: column; gap: 5px; }
     }
   </style>
@@ -295,13 +328,36 @@
     <section class="panel chart-panel">
       <div class="panel-head chart-heading">
         <div>
-          <h2>월별 태풍 발생 평년값</h2>
-          <p>막대 높이는 1991–2020년 월평균 횟수입니다.</p>
+          <h2 id="chartTitle">월별 태풍 발생 통계</h2>
+          <p id="chartDescription">1991–2020년 기간 평균을 불러오는 중입니다.</p>
         </div>
-        <div class="legend" aria-label="그래프 범례">
-          <span><i></i>전체 발생</span>
-          <span class="impact"><i></i>한국 영향</span>
+        <div class="chart-tools">
+          <div class="filters" aria-label="통계 기간 선택">
+            <label for="viewMode">보기</label>
+            <select class="select" id="viewMode">
+              <option value="average" selected>기간 평균</option>
+              <option value="single">단일 연도</option>
+            </select>
+            <div class="range-fields" id="rangeFields">
+              <select class="select" id="startYear" aria-label="시작 연도"></select>
+              <span aria-hidden="true">–</span>
+              <select class="select" id="endYear" aria-label="종료 연도"></select>
+            </div>
+            <div class="single-field" id="singleField" hidden>
+              <select class="select" id="singleYear" aria-label="조회 연도"></select>
+            </div>
+          </div>
+          <div class="legend" aria-label="그래프 범례">
+            <span><i></i>전체 발생</span>
+            <span class="impact"><i></i>한국 영향</span>
+          </div>
         </div>
+      </div>
+      <div class="period-summary" aria-live="polite">
+        <div class="summary-item"><small id="totalLabel">연평균 발생</small><strong id="summaryTotal">—</strong></div>
+        <div class="summary-item"><small id="impactLabel">연평균 한국 영향</small><strong id="summaryImpact">—</strong></div>
+        <div class="summary-item"><small>발생 최다월</small><strong id="summaryPeak">—</strong></div>
+        <div class="summary-item"><small>한국 영향 비율</small><strong id="summaryRate">—</strong></div>
       </div>
       <div class="chart" id="monthlyChart" role="img" aria-label="기상청 월별 태풍 발생 및 한국 영향 평년값 그래프"></div>
       <div class="footnote">
@@ -328,22 +384,104 @@
     ];
 
     const chart = document.querySelector("#monthlyChart");
-    const max = Math.max(...monthlyNormals.map(item => item.total));
+    const viewMode = document.querySelector("#viewMode");
+    const startYear = document.querySelector("#startYear");
+    const endYear = document.querySelector("#endYear");
+    const singleYear = document.querySelector("#singleYear");
+    const rangeFields = document.querySelector("#rangeFields");
+    const singleField = document.querySelector("#singleField");
+    let annualData = [];
 
-    monthlyNormals.forEach(item => {
-      const column = document.createElement("div");
-      column.className = "month";
-      column.title = `${item.month}월: 전체 ${item.total}개, 한국 영향 ${item.impact}개`;
-      column.innerHTML = `
-        <div class="bars">
-          <div class="bar" style="height:${Math.max(2, item.total / max * 100)}%" aria-hidden="true"></div>
-          <div class="bar impact" style="height:${Math.max(2, item.impact / max * 100)}%" aria-hidden="true"></div>
-        </div>
-        <div class="month-label">${item.month}월</div>
-        <div class="month-value">${item.total}</div>
-      `;
-      chart.appendChild(column);
+    const formatNumber = value => Number.isInteger(value) ? String(value) : value.toFixed(1);
+
+    function renderChart(items) {
+      chart.replaceChildren();
+      const max = Math.max(1, ...items.map(item => item.total));
+      items.forEach(item => {
+        const column = document.createElement("div");
+        column.className = "month";
+        column.title = `${item.month}월: 전체 ${formatNumber(item.total)}개, 한국 영향 ${formatNumber(item.impact)}개`;
+        column.innerHTML = `
+          <div class="bars">
+            <div class="bar" style="height:${Math.max(2, item.total / max * 100)}%" aria-hidden="true"></div>
+            <div class="bar impact" style="height:${Math.max(2, item.impact / max * 100)}%" aria-hidden="true"></div>
+          </div>
+          <div class="month-label">${item.month}월</div>
+          <div class="month-value">${formatNumber(item.total)} · ${formatNumber(item.impact)}</div>
+        `;
+        chart.appendChild(column);
+      });
+    }
+
+    function updateSummary(items, total, impact, isAverage, label) {
+      const peak = items.reduce((best, item) => item.total > best.total ? item : best, items[0]);
+      document.querySelector("#chartDescription").textContent = `${label} · 파란색 전체 발생, 노란색 한국 영향`;
+      document.querySelector("#totalLabel").textContent = isAverage ? "연평균 발생" : "연간 발생";
+      document.querySelector("#impactLabel").textContent = isAverage ? "연평균 한국 영향" : "연간 한국 영향";
+      document.querySelector("#summaryTotal").textContent = `${formatNumber(total)}개`;
+      document.querySelector("#summaryImpact").textContent = `${formatNumber(impact)}개`;
+      document.querySelector("#summaryPeak").textContent = `${peak.month}월 · ${formatNumber(peak.total)}개`;
+      document.querySelector("#summaryRate").textContent = total ? `${(impact / total * 100).toFixed(1)}%` : "0%";
+      renderChart(items);
+    }
+
+    function renderSelection() {
+      if (!annualData.length) {
+        updateSummary(monthlyNormals, 25.1, 3.4, true, "1991–2020년 기상청 평년값");
+        return;
+      }
+
+      if (viewMode.value === "single") {
+        const record = annualData.find(item => item.year === Number(singleYear.value)) || annualData.at(-1);
+        const items = record.months.map((month, index) => ({ month: index + 1, ...month }));
+        updateSummary(items, record.total, record.impact, false, `${record.year}년 기상청 통계`);
+        return;
+      }
+
+      let from = Number(startYear.value);
+      let to = Number(endYear.value);
+      if (from > to) [from, to] = [to, from];
+      const selected = annualData.filter(item => item.year >= from && item.year <= to);
+      const items = Array.from({ length: 12 }, (_, index) => ({
+        month: index + 1,
+        total: selected.reduce((sum, item) => sum + item.months[index].total, 0) / selected.length,
+        impact: selected.reduce((sum, item) => sum + item.months[index].impact, 0) / selected.length
+      }));
+      const total = selected.reduce((sum, item) => sum + item.total, 0) / selected.length;
+      const impact = selected.reduce((sum, item) => sum + item.impact, 0) / selected.length;
+      updateSummary(items, total, impact, true, `${from}–${to}년 ${selected.length}개 연도 평균`);
+    }
+
+    function fillYearOptions() {
+      const years = annualData.map(item => item.year).sort((a, b) => a - b);
+      const options = years.map(year => `<option value="${year}">${year}년</option>`).join("");
+      startYear.innerHTML = options;
+      endYear.innerHTML = options;
+      singleYear.innerHTML = options;
+      startYear.value = years.includes(1991) ? "1991" : String(years[0]);
+      endYear.value = years.includes(2020) ? "2020" : String(years.at(-1));
+      singleYear.value = String(years.at(-1));
+    }
+
+    viewMode.addEventListener("change", () => {
+      const single = viewMode.value === "single";
+      rangeFields.hidden = single;
+      singleField.hidden = !single;
+      renderSelection();
     });
+    [startYear, endYear, singleYear].forEach(select => select.addEventListener("change", renderSelection));
+
+    fetch("data/kma-annual.json")
+      .then(response => {
+        if (!response.ok) throw new Error("통계 데이터를 불러오지 못했습니다.");
+        return response.json();
+      })
+      .then(data => {
+        annualData = data.years;
+        fillYearOptions();
+        renderSelection();
+      })
+      .catch(() => renderSelection());
 
     const syncTime = document.querySelector("#syncTime");
     const updateSyncTime = () => {
@@ -372,5 +510,4 @@
   </script>
 </body>
 </html>
-
 

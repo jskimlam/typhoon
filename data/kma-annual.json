@@ -1,0 +1,4133 @@
+{
+  "source": "https://www.weather.go.kr/w/hazard/typhoon/stat.do",
+  "sourceName": "기상청 날씨누리 태풍발생현황 통계",
+  "note": "괄호 안의 수는 우리나라에 영향을 준 태풍 수이며 태풍 발생일 기준입니다.",
+  "fetchedAt": "2026-09-27T08:00:22Z",
+  "years": [
+    {
+      "year": 1951,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 21,
+      "impact": 3
+    },
+    {
+      "year": 1952,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": 4
+    },
+    {
+      "year": 1953,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 3
+    },
+    {
+      "year": 1954,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 21,
+      "impact": 3
+    },
+    {
+      "year": 1955,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 28,
+      "impact": 3
+    },
+    {
+      "year": 1956,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 4
+    },
+    {
+      "year": 1957,
+      "months": [
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 1
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 22,
+      "impact": 2
+    },
+    {
+      "year": 1958,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 31,
+      "impact": 1
+    },
+    {
+      "year": 1959,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 3
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 7
+    },
+    {
+      "year": 1960,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 10,
+          "impact": 2
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": 3
+    },
+    {
+      "year": 1961,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 5
+    },
+    {
+      "year": 1962,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 8,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 30,
+      "impact": 4
+    },
+    {
+      "year": 1963,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        }
+      ],
+      "total": 24,
+      "impact": 3
+    },
+    {
+      "year": 1964,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 4
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 34,
+      "impact": 4
+    },
+    {
+      "year": 1965,
+      "months": [
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 8,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 32,
+      "impact": 3
+    },
+    {
+      "year": 1966,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 10,
+          "impact": 3
+        },
+        {
+          "total": 9,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 35,
+      "impact": 3
+    },
+    {
+      "year": 1967,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 1
+        },
+        {
+          "total": 9,
+          "impact": 0
+        },
+        {
+          "total": 9,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 39,
+      "impact": 1
+    },
+    {
+      "year": 1968,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 8,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": 3
+    },
+    {
+      "year": 1969,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 19,
+      "impact": 1
+    },
+    {
+      "year": 1970,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 26,
+      "impact": 4
+    },
+    {
+      "year": 1971,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 8,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 36,
+      "impact": 3
+    },
+    {
+      "year": 1972,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 31,
+      "impact": 4
+    },
+    {
+      "year": 1973,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 21,
+      "impact": 3
+    },
+    {
+      "year": 1974,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 32,
+      "impact": 3
+    },
+    {
+      "year": 1975,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 21,
+      "impact": 2
+    },
+    {
+      "year": 1976,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 3
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 25,
+      "impact": 6
+    },
+    {
+      "year": 1977,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 21,
+      "impact": 2
+    },
+    {
+      "year": 1978,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 8,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 30,
+      "impact": 4
+    },
+    {
+      "year": 1979,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 24,
+      "impact": 2
+    },
+    {
+      "year": 1980,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 24,
+      "impact": 3
+    },
+    {
+      "year": 1981,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 8,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 5
+    },
+    {
+      "year": 1982,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 25,
+      "impact": 4
+    },
+    {
+      "year": 1983,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 1
+    },
+    {
+      "year": 1984,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": 3
+    },
+    {
+      "year": 1985,
+      "months": [
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 8,
+          "impact": 3
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": 5
+    },
+    {
+      "year": 1986,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 3
+    },
+    {
+      "year": 1987,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 3
+    },
+    {
+      "year": 1988,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 8,
+          "impact": 0
+        },
+        {
+          "total": 8,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 31,
+      "impact": 0
+    },
+    {
+      "year": 1989,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 7,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 32,
+      "impact": 2
+    },
+    {
+      "year": 1990,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 4
+    },
+    {
+      "year": 1991,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 5
+    },
+    {
+      "year": 1992,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 8,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 31,
+      "impact": 2
+    },
+    {
+      "year": 1993,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 7,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        }
+      ],
+      "total": 28,
+      "impact": 4
+    },
+    {
+      "year": 1994,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 2
+        },
+        {
+          "total": 9,
+          "impact": 2
+        },
+        {
+          "total": 8,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 36,
+      "impact": 5
+    },
+    {
+      "year": 1995,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 3
+    },
+    {
+      "year": 1996,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 26,
+      "impact": 2
+    },
+    {
+      "year": 1997,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 28,
+      "impact": 4
+    },
+    {
+      "year": 1998,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 16,
+      "impact": 2
+    },
+    {
+      "year": 1999,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 22,
+      "impact": 5
+    },
+    {
+      "year": 2000,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 5
+    },
+    {
+      "year": 2001,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        }
+      ],
+      "total": 26,
+      "impact": 1
+    },
+    {
+      "year": 2002,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 26,
+      "impact": 4
+    },
+    {
+      "year": 2003,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 21,
+      "impact": 4
+    },
+    {
+      "year": 2004,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 8,
+          "impact": 3
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 5
+    },
+    {
+      "year": 2005,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 1
+    },
+    {
+      "year": 2006,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 7,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 3
+    },
+    {
+      "year": 2007,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 24,
+      "impact": 3
+    },
+    {
+      "year": 2008,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 22,
+      "impact": 1
+    },
+    {
+      "year": 2009,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 22,
+      "impact": 0
+    },
+    {
+      "year": 2010,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 14,
+      "impact": 3
+    },
+    {
+      "year": 2011,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 21,
+      "impact": 3
+    },
+    {
+      "year": 2012,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 2
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 25,
+      "impact": 5
+    },
+    {
+      "year": 2013,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 8,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 1
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 31,
+      "impact": 3
+    },
+    {
+      "year": 2014,
+      "months": [
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 3
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 4
+    },
+    {
+      "year": 2015,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": 4
+    },
+    {
+      "year": 2016,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 26,
+      "impact": 2
+    },
+    {
+      "year": 2017,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 8,
+          "impact": 2
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": 3
+    },
+    {
+      "year": 2018,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 9,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 5
+    },
+    {
+      "year": 2019,
+      "months": [
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 3
+        },
+        {
+          "total": 6,
+          "impact": 3
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 29,
+      "impact": 7
+    },
+    {
+      "year": 2020,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 3
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 23,
+      "impact": 4
+    },
+    {
+      "year": 2021,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 2
+        },
+        {
+          "total": 4,
+          "impact": 1
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 22,
+      "impact": 3
+    },
+    {
+      "year": 2022,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 3
+        },
+        {
+          "total": 5,
+          "impact": 1
+        },
+        {
+          "total": 7,
+          "impact": 1
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 25,
+      "impact": 5
+    },
+    {
+      "year": 2023,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 1
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 17,
+      "impact": 1
+    },
+    {
+      "year": 2024,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 2
+        },
+        {
+          "total": 8,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 1,
+          "impact": 0
+        }
+      ],
+      "total": 26,
+      "impact": 2
+    },
+    {
+      "year": 2025,
+      "months": [
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        },
+        {
+          "total": 2,
+          "impact": 0
+        },
+        {
+          "total": 7,
+          "impact": 0
+        },
+        {
+          "total": 5,
+          "impact": 0
+        },
+        {
+          "total": 6,
+          "impact": 0
+        },
+        {
+          "total": 4,
+          "impact": 0
+        },
+        {
+          "total": 3,
+          "impact": 0
+        },
+        {
+          "total": 0,
+          "impact": 0
+        }
+      ],
+      "total": 27,
+      "impact": null
+    }
+  ]
+}
