@@ -26,11 +26,16 @@ jobs:
         uses: actions/checkout@v6
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Prepare static site
+        shell: bash
+        run: |
+          mkdir -p _site
+          cp index.html _site/
+          cp -r data assets _site/
       - name: Upload site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: _site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
-
