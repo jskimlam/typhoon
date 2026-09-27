@@ -418,7 +418,10 @@
           const pdfRows=pdfTrack.rows;
           if(!pdfRows.length) throw new Error("no PDF track rows");
           const pts=pdfRows.map(r=>[r.lat,r.lon]).filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));
-          if(pts.length>1) L.polyline(pts,{color:"#0c6fb5",weight:3,opacity:.92,dashArray:"8 5"}).addTo(archiveLayer);
+          if(pts.length>1){
+            L.polyline(pts,{color:"#ffffff",weight:7,opacity:.96,dashArray:"10 6",lineCap:"round",lineJoin:"round"}).addTo(archiveLayer);
+            L.polyline(pts,{color:"#ff8a00",weight:3.6,opacity:1,dashArray:"10 6",lineCap:"round",lineJoin:"round"}).addTo(archiveLayer);
+          }
           pdfRows.forEach((r,i)=>{
             const p=[r.lat,r.lon];
             const marker=L.marker(p,{icon:makeDot("jma-history-dot")}).addTo(archiveLayer);
@@ -464,7 +467,10 @@
     }
     setMessage("");
     const pts=rows.map(r=>[Number(r[7]),Number(r[8])]).filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));
-    if(pts.length>1) L.polyline(pts,{color:"#0c6fb5",weight:3,opacity:.92}).addTo(archiveLayer);
+    if(pts.length>1){
+      L.polyline(pts,{color:"#ffffff",weight:7,opacity:.96,lineCap:"round",lineJoin:"round"}).addTo(archiveLayer);
+      L.polyline(pts,{color:"#ff8a00",weight:3.6,opacity:1,lineCap:"round",lineJoin:"round"}).addTo(archiveLayer);
+    }
     rows.forEach((r,i)=>{
       const p=[Number(r[7]),Number(r[8])];
       if(!Number.isFinite(p[0])||!Number.isFinite(p[1])) return;
