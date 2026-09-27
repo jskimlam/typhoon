@@ -312,6 +312,65 @@
     });
     return storms;
   }
+  async function fetchArchivePdfTrack(storm){
+    if(!window.pdfjsLib) throw new Error("PDF parser unavailable");
+    const meta=archiveStormMeta.get(storm)||{};
+    const url=meta.pdf || `${ARCHIVE_BASE}/data/T${storm}.pdf`;
+    const res=await fetch(cacheBust(url),{cache:"no-store"});
+    if(!res.ok) throw new Error("PDF HTTP "+res.status);
+    const data=new Uint8Array(await res.arrayBuffer());
+    const pdf=await window.pdfjsLib.getDocument({data}).promise;
+    const lines=[];
+    let allText="";
+    for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
+      const page=await pdf.getPage(pageNo);
+      const content=await page.getTextContent();
+      const grouped=new Map();
+      content.items.forEach(item=>{
+        const text=String(item.str||"").trim();
+        if(!text) return;
+        const x=Number(item.transform?.[4]||0);
+        const y=Number(item.transform?.[5]||0);
+        const key=Math.round(y/2)*2;
+        if(!grouped.has(key)) grouped.set(key,[]);
+        grouped.get(key).push({x,text});
+      });
+      [...grouped.entries()].sort((a,b)=>b[0]-a[0]).forEach(([,items])=>{
+        const line=items.sort((a,b)=>a.x-b.x).map(v=>v.text).join(" ").replace(/\s+/g," ").trim();
+        if(line){lines.push(line);allText+=" "+line;}
+      });
+    }
+    const titleMatch=allText.match(/台風第\s*\d+\s*号\s+([A-Z][A-Z0-9-]*)\s*\(\s*\d{4}\s*\)/i);
+    const name=titleMatch?.[1]||"";
+    const rows=[];
+    let month=null,day=null;
+    for(const line of lines){
+      const m=line.match(/^(.*?)\b(\d{1,2}(?:\.\d+)?)\s*([NS])\s+(\d{2,3}(?:\.\d+)?)\s*([EW])\s+(\d{3,4}|--|---)\s+(\d{1,3}|--|---)\b/);
+      if(!m) continue;
+      const prefixNums=(m[1].match(/\d{1,4}/g)||[]).map(Number);
+      if(!prefixNums.length) continue;
+      let hour=null;
+      if(prefixNums.length>=3){
+        const vals=prefixNums.slice(-3);
+        month=vals[0];day=vals[1];hour=vals[2];
+      }else if(prefixNums.length===2){
+        day=prefixNums[0];hour=prefixNums[1];
+      }else{
+        hour=prefixNums[0];
+      }
+      if(!(month>=1&&month<=12&&day>=1&&day<=31&&hour>=0&&hour<=23)) continue;
+      let lat=Number(m[2]),lon=Number(m[4]);
+      if(m[3]==="S") lat=-lat;
+      if(m[5]==="W") lon=-lon;
+      const pressure=/^\d+$/.test(m[6])?Number(m[6]):null;
+      const wind=/^\d+$/.test(m[7])?Number(m[7]):null;
+      rows.push({
+        month,day,hour,lat,lon,pressure,wind,
+        label:`${month}/${day} ${String(hour).padStart(2,"0")}시`
+      });
+    }
+    return {rows,name,url};
+  }
   function updateArchiveLinks(){
     const year=archiveYear.value;
     const storm=archiveStormSelect.value;
@@ -320,7 +379,7 @@
     const nn=String(storm||"").slice(-2).padStart(2,"0");
     pdfLink.href=storm ? `${ARCHIVE_BASE}/data/T${yy}${nn}.pdf` : routeLink.href;
   }
-  function renderArchiveStorm(){
+  async function renderArchiveStorm(){
     archiveLayer.clearLayers();
     const storm=archiveStormSelect.value;
     updateArchiveLinks();
@@ -328,9 +387,44 @@
     if(!rows.length){
       const meta=archiveStormMeta.get(storm);
       const provisional=meta?.provisional;
-      setMessage(provisional
-        ? "이 태풍은 JMA 속보 분석 자료입니다. 확정 CSV 전이라 지도 재생은 아직 없으며, 공식 경로도·위치표 PDF에서 최신 과거 경로를 확인할 수 있습니다."
-        : "선택한 태풍의 확정 경로 데이터가 없습니다. 아래 JMA 공식 경로도·위치표 PDF에서 확인할 수 있습니다.");
+      if(provisional){
+        setStatus(`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 PDF 분석 중`,"loading");
+        setMessage("JMA 속보 위치표 PDF에서 경로를 불러오는 중입니다.");
+        try{
+          const pdfTrack=await fetchArchivePdfTrack(storm);
+          const pdfRows=pdfTrack.rows;
+          if(!pdfRows.length) throw new Error("no PDF track rows");
+          const pts=pdfRows.map(r=>[r.lat,r.lon]).filter(p=>Number.isFinite(p[0])&&Number.isFinite(p[1]));
+          if(pts.length>1) L.polyline(pts,{color:"#0c6fb5",weight:3,opacity:.92,dashArray:"8 5"}).addTo(archiveLayer);
+          pdfRows.forEach((r,i)=>{
+            const p=[r.lat,r.lon];
+            const marker=L.marker(p,{icon:makeDot("jma-history-dot")}).addTo(archiveLayer);
+            marker.bindPopup(`<strong>${escapeHtml(pdfTrack.name||storm)}</strong><br>${escapeHtml(r.label)}<br>중심기압 ${r.pressure??"—"} hPa<br>최대풍속 ${r.wind??"—"} m/s`);
+            if(i===0||i===pdfRows.length-1||i%4===0) L.marker(p,{icon:makeLabel(r.label,false,true),interactive:false,zIndexOffset:400}).addTo(archiveLayer);
+          });
+          fitTo(pts);
+          const pressures=pdfRows.map(r=>r.pressure).filter(Number.isFinite);
+          const winds=pdfRows.map(r=>r.wind).filter(Number.isFinite);
+          sideCard.hidden=false;
+          sideName.textContent=`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 ${pdfTrack.name}`.trim();
+          sideCode.textContent="JMA QUICK ANALYSIS · 속보";
+          sidePressure.textContent=pressures.length?Math.min(...pressures)+" hPa":"—";
+          sideWind.textContent=winds.length?Math.max(...winds)+" m/s":"—";
+          sideMove.textContent="속보 경로";
+          sideSpeed.textContent=pdfRows.length+" records";
+          sideList.innerHTML=`<div class="jma-archive-actions"><a class="jma-link-button" href="${routeLink.href}" target="_blank" rel="noopener">JMA 경로도 ↗</a><a class="jma-link-button" href="${pdfTrack.url}" target="_blank" rel="noopener">위치표 PDF ↗</a></div>`;
+          mapTitle.textContent=`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 ${pdfTrack.name}`.trim();
+          mapDescription.textContent="JMA 속보 위치표 PDF · 경로 재생";
+          setMessage("※ 속보 분석값이며 JMA 사후분석 후 확정값으로 변경될 수 있습니다.");
+          setStatus(`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 · 속보 경로`,"ok");
+          return;
+        }catch(err){
+          console.error(err);
+          setMessage("속보 PDF 경로를 지도에 변환하지 못했습니다. 아래 JMA 공식 경로도·위치표 PDF에서 확인할 수 있습니다.");
+        }
+      }else{
+        setMessage("선택한 태풍의 확정 경로 데이터가 없습니다. 아래 JMA 공식 경로도·위치표 PDF에서 확인할 수 있습니다.");
+      }
       archiveLayer.clearLayers();
       sideCard.hidden=false;
       sideName.textContent=`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호`;
@@ -341,7 +435,7 @@
       sideSpeed.textContent="JMA 공식 자료";
       sideList.innerHTML=`<div class="jma-archive-actions"><a class="jma-link-button" href="${routeLink.href}" target="_blank" rel="noopener">JMA 경로도 ↗</a><a class="jma-link-button" href="${pdfLink.href}" target="_blank" rel="noopener">위치표 PDF ↗</a></div>`;
       mapTitle.textContent=`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호`;
-      mapDescription.textContent=provisional ? "JMA 속보 분석 · 공식 경로도 연결" : "JMA 과거 자료";
+      mapDescription.textContent=provisional ? "JMA 속보 분석 · 공식 자료 연결" : "JMA 과거 자료";
       setStatus(`${archiveYear.value}년 태풍 ${Number(storm.slice(-2))}호 · ${provisional?"속보":"과거"}`,"ok");
       return;
     }
