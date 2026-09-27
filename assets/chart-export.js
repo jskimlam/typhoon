@@ -133,13 +133,13 @@
     const totalLabel = escapeXml(state.totalLabel || (state.isAverage ? "연평균 발생" : "연간 발생"));
     const impactLabel = escapeXml(state.impactLabel || (state.isAverage ? "연평균 한국 영향" : "연간 한국 영향"));
     const subtitle = escapeXml(state.label || "");
-    const normalAnnualTotal = Number(state.normalAnnualTotal) || 25.1;
-    const normalKoreaImpact = Number(state.normalKoreaImpact) || 3.4;
-    const normalSeasonTotal = Number(state.normalSeasonTotal) || 14.4;
-    const seasonTotal = Number.isFinite(Number(state.seasonTotal)) ? Number(state.seasonTotal) : items.filter(d => d.month >= 7 && d.month <= 9).reduce((sum,d)=>sum+(Number(d.total)||0),0);
-    const wholeRate = normalAnnualTotal ? (Number(state.total) / normalAnnualTotal * 100).toFixed(1) + "%" : "—";
-    const seasonRate = normalSeasonTotal ? (seasonTotal / normalSeasonTotal * 100).toFixed(1) + "%" : "—";
-    const impactNormalRate = normalKoreaImpact ? (Number(state.impact) / normalKoreaImpact * 100).toFixed(1) + "%" : "—";
+    const seasonTotal = Number.isFinite(Number(state.seasonTotal))
+      ? Number(state.seasonTotal)
+      : items.filter(d => d.month >= 7 && d.month <= 9).reduce((sum,d)=>sum+(Number(d.total)||0),0);
+    const seasonShare = Number.isFinite(Number(state.seasonShare))
+      ? Number(state.seasonShare)
+      : (Number(state.total) ? seasonTotal / Number(state.total) * 100 : 0);
+    const impactShare = Number.isFinite(Number(state.impactShare)) ? Number(state.impactShare) : null;
     const peak = items.reduce((best, d) => Number(d.total) > Number(best.total) ? d : best, items[0]);
 
     const gridLines = [0, .25, .5, .75, 1].map(p => {
@@ -171,20 +171,19 @@
 
     const kpis = [
       {label: totalLabel, value: fmt(state.total) + "개", color:"#2F7FEA"},
-      {label: impactLabel, value: fmt(state.impact) + "개", color:"#F2B638"},
+      {label: impactLabel, value: state.impact == null ? "자료 없음" : fmt(state.impact) + "개", color:"#F2B638"},
       {label:"발생 최다월", value:`${peak.month}월 · ${fmt(peak.total)}개`, color:"#40BFEF"},
-      {label:"전체 발생 평년비", value:wholeRate, color:"#35B9E8"},
-      {label:"7–9월 시즌 평년비", value:seasonRate, color:"#F2B638"},
-      {label:"한국 영향 평년비", value:impactNormalRate, color:"#FF5874"}
+      {label:"7–9월 / 전체", value:seasonShare.toFixed(1) + "%", color:"#F2B638"},
+      {label:"한국 영향 / 전체", value:impactShare == null ? "자료 없음" : impactShare.toFixed(1) + "%", color:"#FF5874"}
     ].map((k, i) => {
-      const gap = 10;
-      const width = (1456 - gap * 5) / 6;
+      const gap = 12;
+      const width = (1456 - gap * 4) / 5;
       const x = 72 + i * (width + gap);
       return `
         <rect x="${x}" y="146" width="${width}" height="104" rx="18" fill="${cardFill}" stroke="#D8E3EC"/>
         <rect x="${x}" y="146" width="5" height="104" rx="3" fill="${k.color}"/>
-        <text x="${x+16}" y="179" class="kpiLabel">${escapeXml(k.label)}</text>
-        <text x="${x+16}" y="222" class="kpiValue">${escapeXml(k.value)}</text>
+        <text x="${x+18}" y="179" class="kpiLabel">${escapeXml(k.label)}</text>
+        <text x="${x+18}" y="222" class="kpiValue">${escapeXml(k.value)}</text>
       `;
     }).join("");
 
@@ -242,7 +241,7 @@
       <text x="1528" y="727" text-anchor="end" font-size="14" font-weight="800" fill="#5C7386">7–9월 집중 관리</text>
       ${seasonCells}
       <line x1="72" y1="842" x2="1528" y2="842" stroke="#DCE5ED"/>
-      <text x="72" y="873" class="footer">※ 한국 영향 값은 기상청 통계표의 괄호 안 수치입니다.</text>
+      <text x="72" y="873" class="footer">※ %는 구성비입니다. 한국 영향 결측 연도는 비중 계산에서 제외합니다.</text>
       <text x="1528" y="873" text-anchor="end" class="footer">출처: 기상청 날씨누리 · 태풍발생현황 통계</text>
     </svg>`;
   }
