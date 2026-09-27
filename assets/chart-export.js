@@ -135,7 +135,7 @@
     const subtitle = escapeXml(state.label || "");
     const seasonTotal = Number.isFinite(Number(state.seasonTotal))
       ? Number(state.seasonTotal)
-      : items.filter(d => d.month >= 7 && d.month <= 9).reduce((sum,d)=>sum+(Number(d.total)||0),0);
+      : items.filter(d => d.month >= 7 && d.month <= 10).reduce((sum,d)=>sum+(Number(d.total)||0),0);
     const seasonShare = Number.isFinite(Number(state.seasonShare))
       ? Number(state.seasonShare)
       : (Number(state.total) ? seasonTotal / Number(state.total) * 100 : 0);
@@ -155,7 +155,7 @@
       const impactX = gx + gap/2;
       const totalY = plotBottom - totalH;
       const impactY = plotBottom - impactH;
-      const peakBand = d.month >= 7 && d.month <= 9
+      const peakBand = d.month >= 7 && d.month <= 10
         ? `<rect x="${chartX + groupW*i + 5}" y="${chartY+8}" width="${groupW-10}" height="${chartH-18}" rx="14" fill="#FF6E7F" fill-opacity=".055"/>`
         : "";
       return `
@@ -173,7 +173,7 @@
       {label: totalLabel, value: fmt(state.total) + "개", color:"#2F7FEA"},
       {label: impactLabel, value: state.impact == null ? "자료 없음" : fmt(state.impact) + "개", color:"#F2B638"},
       {label:"발생 최다월", value:`${peak.month}월 · ${fmt(peak.total)}개`, color:"#40BFEF"},
-      {label:"7–9월 / 전체", value:seasonShare.toFixed(1) + "%", color:"#F2B638"},
+      {label:"7–10월 / 전체", value:seasonShare.toFixed(1) + "%", color:"#F2B638"},
       {label:"한국 영향 / 전체", value:impactShare == null ? "자료 없음" : impactShare.toFixed(1) + "%", color:"#FF5874"}
     ].map((k, i) => {
       const gap = 12;
@@ -238,7 +238,7 @@
       ${gridLines}
       ${groups}
       <text x="72" y="727" font-size="14" font-weight="800" fill="#5C7386">연간 태풍 시즌 주의 구간</text>
-      <text x="1528" y="727" text-anchor="end" font-size="14" font-weight="800" fill="#5C7386">7–9월 집중 관리</text>
+      <text x="1528" y="727" text-anchor="end" font-size="14" font-weight="800" fill="#5C7386">7–10월 태풍 시즌</text>
       ${seasonCells}
       <line x1="72" y1="842" x2="1528" y2="842" stroke="#DCE5ED"/>
       <text x="72" y="873" class="footer">※ %는 구성비입니다. 한국 영향 결측 연도는 비중 계산에서 제외합니다.</text>
