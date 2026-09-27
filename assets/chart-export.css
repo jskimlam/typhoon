@@ -1,0 +1,61 @@
+/* Chart export UX */
+.chart-export-trigger{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:38px;padding:0 12px;border:1px solid rgba(89,216,255,.28);
+  border-radius:10px;background:rgba(89,216,255,.08);color:#cfefff;
+  font:800 .7rem/1 Pretendard,"Noto Sans KR",system-ui,sans-serif;
+  cursor:pointer;white-space:nowrap;transition:.18s ease;
+}
+.chart-export-trigger:hover{transform:translateY(-1px);border-color:rgba(89,216,255,.55);background:rgba(89,216,255,.13)}
+.chart-export-trigger svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8}
+
+.chart-export-backdrop{
+  position:fixed;z-index:1200;inset:0;display:grid;place-items:center;padding:20px;
+  background:rgba(2,9,17,.72);backdrop-filter:blur(8px);
+}
+.chart-export-backdrop[hidden]{display:none}
+.chart-export-dialog{
+  width:min(620px,100%);border:1px solid rgba(154,184,214,.2);border-radius:20px;
+  background:#0e2135;color:#f4f8fc;box-shadow:0 30px 90px rgba(0,0,0,.45);overflow:hidden;
+}
+.chart-export-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 20px 15px;border-bottom:1px solid rgba(154,184,214,.15)}
+.chart-export-head h3{margin:0;font-size:1.03rem;letter-spacing:-.025em}
+.chart-export-head p{margin:6px 0 0;color:#9fb3c5;font-size:.72rem;line-height:1.55}
+.chart-export-close{
+  width:36px;height:36px;display:grid;place-items:center;flex:0 0 auto;border:1px solid rgba(255,255,255,.12);
+  border-radius:10px;background:rgba(255,255,255,.045);color:#dce8f2;font-size:1.15rem;cursor:pointer
+}
+.chart-export-options{display:grid;gap:9px;padding:14px 16px 8px}
+.chart-export-option{
+  position:relative;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:12px;align-items:center;
+  width:100%;padding:13px;border:1px solid rgba(154,184,214,.15);border-radius:14px;
+  background:rgba(255,255,255,.035);color:#f2f7fb;text-align:left;cursor:pointer;transition:.18s ease
+}
+.chart-export-option:hover{border-color:rgba(89,216,255,.4);background:rgba(89,216,255,.07);transform:translateY(-1px)}
+.chart-export-option.recommended{border-color:rgba(89,216,255,.28);background:linear-gradient(120deg,rgba(56,135,255,.11),rgba(89,216,255,.045))}
+.chart-export-icon{
+  width:44px;height:44px;display:grid;place-items:center;border-radius:12px;
+  background:#0a1929;border:1px solid rgba(154,184,214,.15);font-size:.67rem;font-weight:900;color:#93dcff
+}
+.chart-export-option strong{display:block;font-size:.82rem}
+.chart-export-option small{display:block;margin-top:4px;color:#91a8ba;font-size:.65rem;line-height:1.45}
+.chart-export-badge{padding:5px 7px;border-radius:999px;background:rgba(89,216,255,.12);color:#78ddff;font-size:.56rem;font-weight:900;white-space:nowrap}
+.chart-export-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 17px 15px;color:#8199ad;font-size:.62rem}
+.chart-export-status{color:#9fb5c6}.chart-export-status.busy{color:#ffd477}.chart-export-status.done{color:#6ee3b6}.chart-export-status.error{color:#ff8998}
+
+@media(max-width:620px){
+  .chart-export-trigger{min-height:34px;padding:0 9px;font-size:.64rem}
+  .chart-export-backdrop{align-items:end;padding:0}
+  .chart-export-dialog{width:100%;border-radius:20px 20px 0 0;padding-bottom:max(4px,env(safe-area-inset-bottom))}
+  .chart-export-head{padding:16px 15px 12px}
+  .chart-export-options{padding:11px 11px 7px}
+  .chart-export-option{grid-template-columns:40px minmax(0,1fr) auto;padding:11px;gap:9px}
+  .chart-export-icon{width:40px;height:40px}
+  .chart-export-foot{padding:8px 12px 12px}
+}
+@media(max-width:430px){
+  .chart-export-trigger{width:100%}
+  .chart-export-option strong{font-size:.76rem}
+  .chart-export-option small{font-size:.6rem}
+  .chart-export-badge{font-size:.52rem}
+}
