@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="기상청 공식 태풍정보와 과거 통계를 함께 보는 동북아 태풍 대시보드">
   <link rel="icon" type="image/png" href="assets/lam-typhoon-icon.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="assets/jma-map.css">
   <title>동북아 태풍 아카이브</title>
   <style>
     :root {
@@ -483,13 +485,13 @@
       </div>
       <div class="actions">
         <a class="button official" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer">기상청 원문 ↗</a>
-        <a class="button" href="https://www.ventusky.com/" target="_blank" rel="noopener noreferrer">Ventusky 열기 ↗</a>
+        <a class="button" href="https://www.jma.go.jp/bosai/map.html#5/33.852/135.571/&amp;elem=root&amp;contents=typhoon" target="_blank" rel="noopener noreferrer">JMA 태풍지도 ↗</a>
         <button class="button primary" id="refreshMap" type="button">지도 새로고침</button>
       </div>
     </header>
 
     <section class="notice" aria-label="데이터 연결 상태">
-      <span class="status">기상청 태풍발생현황 통계를 공식 출처로 등록했습니다.</span>
+      <span class="status">JMA 공식 태풍정보와 기상청 태풍 통계를 연결했습니다.</span>
       <span class="sync" id="syncTime">화면 동기화 시각 확인 중</span>
     </section>
 
@@ -497,39 +499,76 @@
       <article class="panel map-panel" id="mapPanel">
         <div class="panel-head">
           <div>
-            <h2 id="mapTitle">Ventusky 바람지도</h2>
-            <p id="mapDescription">실시간 바람·태풍 경로·날짜/시간</p>
+            <h2 id="mapTitle">일본 기상청 JMA 태풍도</h2>
+            <p id="mapDescription">현재 위치 · 예상 진로 · 예보원 · 날짜/시간</p>
           </div>
-          <span class="badge" id="mapBadge">VENTUSKY LIVE</span>
+          <span class="badge" id="mapBadge">JMA OFFICIAL</span>
         </div>
         <div class="map-tabs">
           <div class="map-tablist" role="tablist" aria-label="태풍 지도 선택">
-            <button class="map-tab" id="ventuskyTab" type="button" role="tab" aria-selected="true" aria-controls="ventuskyFrame">Ventusky 바람지도</button>
-            <button class="map-tab" id="kmaTab" type="button" role="tab" aria-selected="false" aria-controls="weatherFrame">기상청 공식정보</button>
+            <button class="map-tab" id="jmaTab" type="button" role="tab" aria-selected="true" aria-controls="jmaMap">JMA 태풍도</button>
+            <button class="map-tab" id="kmaTab" type="button" role="tab" aria-selected="false" aria-controls="weatherFrame">한국 기상청</button>
           </div>
           <button class="map-expand" id="expandMap" type="button" aria-pressed="false">전체화면</button>
         </div>
-        <div class="map-wrap" id="mapWrap">
-          <iframe
-            id="ventuskyFrame"
-            title="Ventusky 동북아시아 실시간 바람지도"
-            loading="eager"
-            allowfullscreen
-            src="https://embed.ventusky.com/?p=30;130;4&amp;l=wind-10m&amp;w=soft">
-          </iframe>
-          <iframe
-            id="weatherFrame"
-            title="기상청 태풍 상세정보"
-            loading="lazy"
-            allowfullscreen
-            hidden
-            src="https://www.weather.go.kr/w/typhoon/ko/weather/typhoon_02.jsp">
-          </iframe>
+        <div class="jma-toolbar" id="jmaToolbar">
+          <div class="jma-mode" aria-label="태풍 조회 방식">
+            <button class="jma-mode-button" id="currentModeButton" type="button" aria-pressed="true">현재·예보</button>
+            <button class="jma-mode-button" id="archiveModeButton" type="button" aria-pressed="false">과거 태풍</button>
+          </div>
+          <div class="jma-current-controls" id="jmaCurrentControls">
+            <div class="jma-field">
+              <label for="activeTyphoonSelect">태풍</label>
+              <select class="jma-select" id="activeTyphoonSelect" aria-label="현재 태풍 선택"></select>
+            </div>
+          </div>
+          <div class="jma-archive-controls" id="jmaArchiveControls" hidden>
+            <div class="jma-field">
+              <label for="archiveYear">연도</label>
+              <select class="jma-select" id="archiveYear" aria-label="과거 태풍 연도"></select>
+            </div>
+            <div class="jma-field">
+              <label for="archiveStormSelect">태풍</label>
+              <select class="jma-select" id="archiveStormSelect" aria-label="과거 태풍 선택"></select>
+            </div>
+            <a class="jma-link-button" id="jmaRouteLink" href="https://www.data.jma.go.jp/typhoon/" target="_blank" rel="noopener noreferrer">JMA 경로도 ↗</a>
+            <a class="jma-link-button" id="jmaPdfLink" href="https://www.data.jma.go.jp/typhoon/" target="_blank" rel="noopener noreferrer">위치표 PDF ↗</a>
+          </div>
+          <span class="jma-status" id="jmaDataStatus">JMA 데이터 연결 중</span>
         </div>
-        <div class="map-label" id="mapLabel">Ventusky의 실시간 기상 시각화입니다. 태풍 대응 판단은 기상청 공식정보를 함께 확인하세요.</div>
+        <div class="map-wrap" id="mapWrap">
+          <div id="jmaMap" aria-label="JMA 태풍 현재 위치 및 예상 경로 지도"></div>
+          <iframe id="weatherFrame" title="한국 기상청 태풍 상세정보" loading="lazy" allowfullscreen hidden src="https://www.weather.go.kr/w/typhoon/ko/weather/typhoon_02.jsp"></iframe>
+          <div class="jma-map-message" id="jmaMapMessage" hidden></div>
+          <div class="jma-legend" id="jmaLegend">
+            <span><i></i>예상 진로</span>
+            <span class="past"><i></i>과거 경로</span>
+            <span class="cone"><i></i>예보원</span>
+          </div>
+        </div>
+        <div class="map-label" id="mapLabel">일본 기상청(JMA) 공식 태풍 데이터로 현재 위치와 예상 경로를 표시합니다. 새로고침 버튼으로 즉시 갱신하며 10분마다 새 태풍을 자동 확인합니다.</div>
       </article>
 
       <aside class="side">
+        <article class="panel" id="jmaStormCard" hidden>
+          <div class="panel-head">
+            <div><h2>태풍 상세</h2><p>JMA 현재·예보 / 과거 경로</p></div>
+            <span class="badge">JMA</span>
+          </div>
+          <div class="jma-side-card">
+            <div class="jma-storm-heading">
+              <strong id="jmaStormName">태풍 정보</strong><span id="jmaStormCode">JMA</span>
+            </div>
+            <div class="jma-kpis">
+              <div class="jma-kpi"><small>중심기압</small><strong id="jmaPressure">—</strong></div>
+              <div class="jma-kpi"><small>최대풍속</small><strong id="jmaWind">—</strong></div>
+              <div class="jma-kpi"><small>이동방향</small><strong id="jmaMove">—</strong></div>
+              <div class="jma-kpi"><small>이동속도</small><strong id="jmaSpeed">—</strong></div>
+            </div>
+            <div class="jma-forecast-list" id="jmaForecastList"></div>
+          </div>
+        </article>
+
         <article class="panel">
           <div class="panel-head">
             <div>
@@ -560,8 +599,9 @@
 
         <article class="panel source-card">
           <h3>공식 데이터 출처</h3>
-          <p>월별·연도별 태풍 발생 수와 괄호 안의 우리나라 영향 태풍 수는 기상청 날씨누리의 태풍발생현황 통계를 기준으로 합니다.</p>
-          <a class="button source-link" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer">기상청 태풍발생현황 통계 열기 ↗</a>
+          <p>현재 위치와 예상 진로는 일본 기상청(JMA) 공식 태풍정보를 사용하고, 월별·연도별 발생 및 한국 영향 통계는 기상청 날씨누리를 기준으로 합니다.</p>
+          <a class="button source-link" href="https://www.jma.go.jp/bosai/map.html#5/33.852/135.571/&amp;elem=root&amp;contents=typhoon" target="_blank" rel="noopener noreferrer">JMA 현재 태풍지도 열기 ↗</a>
+          <a class="button source-link" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer" style="margin-top:8px">기상청 태풍발생현황 통계 ↗</a>
         </article>
       </aside>
     </section>
@@ -787,114 +827,9 @@
       }).format(new Date())}`;
     };
 
-    const mapPanel = document.querySelector("#mapPanel");
-    const mapWrap = document.querySelector("#mapWrap");
-    const ventuskyFrame = document.querySelector("#ventuskyFrame");
-    const weatherFrame = document.querySelector("#weatherFrame");
-    const ventuskyTab = document.querySelector("#ventuskyTab");
-    const kmaTab = document.querySelector("#kmaTab");
-    const expandMapButton = document.querySelector("#expandMap");
-    const mapTitle = document.querySelector("#mapTitle");
-    const mapDescription = document.querySelector("#mapDescription");
-    const mapBadge = document.querySelector("#mapBadge");
-    const mapLabel = document.querySelector("#mapLabel");
-    const compactMapQuery = window.matchMedia("(max-width: 620px)");
-    let activeMap = "ventusky";
-
-    const layoutWeatherFrame = () => {
-      if (!compactMapQuery.matches) {
-        weatherFrame.style.width = "";
-        weatherFrame.style.height = "";
-        weatherFrame.style.transform = "";
-        return;
-      }
-
-      const sourceWidth = 1200;
-      const scale = mapWrap.clientWidth / sourceWidth;
-      weatherFrame.style.width = `${sourceWidth}px`;
-      weatherFrame.style.height = `${Math.ceil(mapWrap.clientHeight / scale)}px`;
-      weatherFrame.style.transform = `scale(${scale})`;
-    };
-
-    const mapViews = {
-      ventusky: {
-        frame: ventuskyFrame,
-        tab: ventuskyTab,
-        title: "Ventusky 바람지도",
-        description: "실시간 바람·태풍 경로·날짜/시간",
-        badge: "VENTUSKY LIVE",
-        label: "Ventusky의 실시간 기상 시각화입니다. 태풍 대응 판단은 기상청 공식정보를 함께 확인하세요."
-      },
-      kma: {
-        frame: weatherFrame,
-        tab: kmaTab,
-        title: "기상청 현재 태풍정보",
-        description: "태풍 위치·예상 경로·강도·중심기압",
-        badge: "KMA OFFICIAL",
-        label: "기상청이 제공하는 공식 태풍 상세정보 화면입니다. 태풍 정보 종료 후에도 24시간 동안 표시될 수 있습니다."
-      }
-    };
-
-    const setMapView = name => {
-      activeMap = name;
-      Object.entries(mapViews).forEach(([key, view]) => {
-        const selected = key === name;
-        view.frame.hidden = !selected;
-        view.tab.setAttribute("aria-selected", String(selected));
-        view.tab.tabIndex = selected ? 0 : -1;
-      });
-      const view = mapViews[name];
-      mapTitle.textContent = view.title;
-      mapDescription.textContent = view.description;
-      mapBadge.textContent = view.badge;
-      mapLabel.textContent = view.label;
-      requestAnimationFrame(layoutWeatherFrame);
-    };
-
-    ventuskyTab.addEventListener("click", () => setMapView("ventusky"));
-    kmaTab.addEventListener("click", () => setMapView("kma"));
-    expandMapButton.addEventListener("click", () => {
-      const expanded = !mapPanel.classList.contains("is-expanded");
-      mapPanel.classList.toggle("is-expanded", expanded);
-      document.body.classList.toggle("map-expanded", expanded);
-      expandMapButton.textContent = expanded ? "닫기" : "전체화면";
-      expandMapButton.setAttribute("aria-pressed", String(expanded));
-      requestAnimationFrame(layoutWeatherFrame);
-    });
-    document.addEventListener("keydown", event => {
-      if (event.key !== "Escape" || !mapPanel.classList.contains("is-expanded")) return;
-      mapPanel.classList.remove("is-expanded");
-      document.body.classList.remove("map-expanded");
-      expandMapButton.textContent = "전체화면";
-      expandMapButton.setAttribute("aria-pressed", "false");
-      requestAnimationFrame(layoutWeatherFrame);
-    });
-
-    compactMapQuery.addEventListener?.("change", layoutWeatherFrame);
-    if ("ResizeObserver" in window) {
-      new ResizeObserver(layoutWeatherFrame).observe(mapWrap);
-    } else {
-      window.addEventListener("resize", layoutWeatherFrame);
-    }
-    setMapView("ventusky");
-
-    document.querySelector("#refreshMap").addEventListener("click", event => {
-      const button = event.currentTarget;
-      const frame = mapViews[activeMap].frame;
-      const url = new URL(frame.src);
-      url.searchParams.set("refresh", Date.now());
-      button.textContent = "새로 불러오는 중…";
-      button.disabled = true;
-      frame.addEventListener("load", () => {
-        button.textContent = "지도 새로고침";
-        button.disabled = false;
-        updateSyncTime();
-        layoutWeatherFrame();
-      }, { once: true });
-      frame.src = url.toString();
-    });
-
     updateSyncTime();
   </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="assets/jma-map.js"></script>
 </body>
 </html>
