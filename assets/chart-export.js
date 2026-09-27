@@ -135,7 +135,10 @@
     const subtitle = escapeXml(state.label || "");
     const normalAnnualTotal = Number(state.normalAnnualTotal) || 25.1;
     const normalKoreaImpact = Number(state.normalKoreaImpact) || 3.4;
+    const normalSeasonTotal = Number(state.normalSeasonTotal) || 14.4;
+    const seasonTotal = Number.isFinite(Number(state.seasonTotal)) ? Number(state.seasonTotal) : items.filter(d => d.month >= 7 && d.month <= 9).reduce((sum,d)=>sum+(Number(d.total)||0),0);
     const wholeRate = normalAnnualTotal ? (Number(state.total) / normalAnnualTotal * 100).toFixed(1) + "%" : "—";
+    const seasonRate = normalSeasonTotal ? (seasonTotal / normalSeasonTotal * 100).toFixed(1) + "%" : "—";
     const impactNormalRate = normalKoreaImpact ? (Number(state.impact) / normalKoreaImpact * 100).toFixed(1) + "%" : "—";
     const peak = items.reduce((best, d) => Number(d.total) > Number(best.total) ? d : best, items[0]);
 
@@ -171,16 +174,17 @@
       {label: impactLabel, value: fmt(state.impact) + "개", color:"#F2B638"},
       {label:"발생 최다월", value:`${peak.month}월 · ${fmt(peak.total)}개`, color:"#40BFEF"},
       {label:"전체 발생 평년비", value:wholeRate, color:"#35B9E8"},
+      {label:"7–9월 시즌 평년비", value:seasonRate, color:"#F2B638"},
       {label:"한국 영향 평년비", value:impactNormalRate, color:"#FF5874"}
     ].map((k, i) => {
-      const gap = 12;
-      const width = (1456 - gap * 4) / 5;
+      const gap = 10;
+      const width = (1456 - gap * 5) / 6;
       const x = 72 + i * (width + gap);
       return `
         <rect x="${x}" y="146" width="${width}" height="104" rx="18" fill="${cardFill}" stroke="#D8E3EC"/>
         <rect x="${x}" y="146" width="5" height="104" rx="3" fill="${k.color}"/>
-        <text x="${x+18}" y="179" class="kpiLabel">${escapeXml(k.label)}</text>
-        <text x="${x+18}" y="222" class="kpiValue">${escapeXml(k.value)}</text>
+        <text x="${x+16}" y="179" class="kpiLabel">${escapeXml(k.label)}</text>
+        <text x="${x+16}" y="222" class="kpiValue">${escapeXml(k.value)}</text>
       `;
     }).join("");
 
@@ -214,8 +218,8 @@
           .title{font-size:38px;font-weight:900;fill:#10263A;letter-spacing:-1px}
           .subtitle{font-size:18px;font-weight:600;fill:#6A8092}
           .eyebrow{font-size:13px;font-weight:900;fill:#7890A4;letter-spacing:2px}
-          .kpiLabel{font-size:14px;font-weight:700;fill:#677E91}
-          .kpiValue{font-size:25px;font-weight:900;fill:#10263A}
+          .kpiLabel{font-size:12.5px;font-weight:700;fill:#677E91}
+          .kpiValue{font-size:23px;font-weight:900;fill:#10263A}
           .value{font-size:14px;font-weight:900}.value.blue{fill:#17324A}.value.yellow{fill:#9A6500}
           .month{font-size:15px;font-weight:900;fill:#21394F}.monthSub{font-size:10px;font-weight:650;fill:#7A90A2}
           .legendText{font-size:14px;font-weight:750;fill:#536B7E}
