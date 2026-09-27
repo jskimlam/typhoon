@@ -42,3 +42,60 @@
   .jma-field,.jma-archive-controls,.jma-current-controls{flex:1}.jma-select{max-width:none;flex:1;min-width:0}
   .jma-status{width:100%;margin-left:0}.jma-legend{left:8px;bottom:8px}
 }
+
+/* Fold / narrow-cover responsive refinements */
+@media(max-width:620px){
+  .jma-toolbar{align-items:stretch}
+  .jma-current-controls{width:100%}
+  .jma-field{width:100%}
+  .jma-field label{flex:0 0 auto}
+  .jma-select{width:100%}
+  .jma-map-message{width:calc(100% - 22px);padding:12px 13px;font-size:.68rem}
+  .jma-time-label{padding:3px 5px;font-size:9px}
+  .jma-archive-label{padding:3px 5px;font-size:9px}
+  .jma-kpis{gap:6px}
+  .jma-kpi{padding:9px}
+  .jma-kpi strong{font-size:.88rem}
+  .jma-forecast-row{grid-template-columns:64px minmax(0,1fr) auto;gap:5px;font-size:.61rem}
+}
+@media(max-width:430px){
+  .jma-toolbar{padding:7px;gap:5px}
+  .jma-mode{gap:4px}
+  .jma-mode-button,.jma-link-button{min-height:34px;padding:0 7px;font-size:.62rem}
+  .jma-current-controls{display:block}
+  .jma-field{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px}
+  .jma-field label{align-self:center;font-size:.58rem}
+  .jma-select{min-height:34px;padding-left:7px;padding-right:22px;font-size:.62rem}
+  .jma-archive-controls{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    width:100%;
+    gap:5px;
+  }
+  .jma-archive-controls .jma-field{display:grid;grid-template-columns:1fr;gap:3px}
+  .jma-archive-controls .jma-link-button{min-width:0;width:100%}
+  .jma-status{font-size:.56rem;white-space:normal}
+  .jma-legend{
+    left:6px;right:6px;bottom:6px;
+    display:flex;flex-wrap:wrap;gap:4px 8px;
+    width:max-content;max-width:calc(100% - 12px);
+    padding:6px 7px;font-size:8px;
+  }
+  .jma-legend i{width:12px}
+  .leaflet-control-attribution{font-size:7px}
+  .jma-side-card{padding:11px}
+  .jma-storm-heading strong{font-size:1rem}
+  .jma-storm-heading span{font-size:.58rem}
+  .jma-kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+  .jma-kpi{padding:8px}
+  .jma-kpi small{font-size:.55rem}
+  .jma-kpi strong{font-size:.8rem}
+  .jma-forecast-row{grid-template-columns:58px minmax(0,1fr) auto;font-size:.56rem}
+}
+@media(max-width:350px){
+  .jma-mode-button,.jma-link-button{font-size:.58rem}
+  .jma-field label{font-size:.54rem}
+  .jma-select{font-size:.58rem}
+  .jma-time-label,.jma-archive-label{font-size:8px}
+  .jma-forecast-row{grid-template-columns:54px minmax(0,1fr) auto;gap:4px}
+}
