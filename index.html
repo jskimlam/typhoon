@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="기상청 공식 통계와 Windy 지도를 함께 보는 동북아 태풍 대시보드">
+  <meta name="description" content="기상청 공식 태풍정보와 과거 통계를 함께 보는 동북아 태풍 대시보드">
   <title>동북아 태풍 아카이브</title>
   <style>
     :root {
@@ -125,8 +125,6 @@
     .panel-head h2 { margin: 0; font-size: 1.02rem; letter-spacing: -.02em; }
     .panel-head p { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
     .badge { padding: 7px 10px; border-radius: 999px; background: rgba(89,216,255,.11); color: var(--cyan); font-size: .72rem; white-space: nowrap; }
-    .map-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-    .tracker-link { min-height: 34px; padding: 0 11px; border-color: rgba(89,216,255,.3); color: #c9f2ff; font-size: .74rem; }
 
     .map-wrap { position: relative; height: min(61vh, 650px); min-height: 430px; background: #0b1d2d; }
     .map-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
@@ -260,7 +258,7 @@
       </div>
       <div class="actions">
         <a class="button official" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer">기상청 원문 ↗</a>
-        <button class="button primary" id="refreshMap" type="button">지도 새로고침</button>
+        <button class="button primary" id="refreshMap" type="button">태풍정보 새로고침</button>
       </div>
     </header>
 
@@ -273,23 +271,20 @@
       <article class="panel">
         <div class="panel-head">
           <div>
-            <h2>동북아 바람·기압 지도</h2>
-            <p>한국·일본·중국 동부·대만·필리핀 해역</p>
+            <h2>기상청 현재 태풍정보</h2>
+            <p>태풍 위치·예상 경로·강도·중심기압</p>
           </div>
-          <div class="map-actions">
-            <span class="badge">WINDY</span>
-            <a class="button tracker-link" href="https://www.windy.com/hurricanes" target="_blank" rel="noopener noreferrer">Windy 태풍 경로 보기 ↗</a>
-          </div>
+          <span class="badge">KMA OFFICIAL</span>
         </div>
         <div class="map-wrap">
           <iframe
-            id="windyMap"
-            title="동북아시아 Windy 바람 지도"
+            id="weatherFrame"
+            title="기상청 태풍 상세정보"
             loading="eager"
             allowfullscreen
-            src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=m%2Fs&zoom=4&overlay=wind&product=gfs&level=surface&lat=29.5&lon=132.5&pressure=true&message=true">
+            src="https://www.weather.go.kr/w/typhoon/ko/weather/typhoon_02.jsp">
           </iframe>
-          <div class="map-label">이 화면은 Windy 바람·기압 지도입니다. 활동 태풍과 예상 경로는 위의 ‘Windy 태풍 경로 보기’에서 확인할 수 있습니다.</div>
+          <div class="map-label">기상청이 제공하는 공식 태풍 상세정보 화면입니다. 태풍 정보 종료 후에도 24시간 동안 표시될 수 있습니다.</div>
         </div>
       </article>
 
@@ -498,13 +493,13 @@
 
     document.querySelector("#refreshMap").addEventListener("click", event => {
       const button = event.currentTarget;
-      const frame = document.querySelector("#windyMap");
+      const frame = document.querySelector("#weatherFrame");
       const url = new URL(frame.src);
       url.searchParams.set("refresh", Date.now());
       button.textContent = "새로 불러오는 중…";
       button.disabled = true;
       frame.addEventListener("load", () => {
-        button.textContent = "지도 새로고침";
+        button.textContent = "태풍정보 새로고침";
         button.disabled = false;
         updateSyncTime();
       }, { once: true });
