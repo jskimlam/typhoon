@@ -99,3 +99,18 @@
   .jma-time-label,.jma-archive-label{font-size:8px}
   .jma-forecast-row{grid-template-columns:54px minmax(0,1fr) auto;gap:4px}
 }
+
+.jma-mapstyle{display:flex;gap:5px;padding:3px;border:1px solid rgba(255,255,255,.12);border-radius:10px;background:rgba(255,255,255,.035)}
+.jma-mapstyle-button{min-height:30px;padding:0 10px;border:0;border-radius:7px;background:transparent;color:#9fb5c6;font:800 .64rem/1 Pretendard,"Noto Sans KR",system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.jma-mapstyle-button[aria-pressed="true"]{background:linear-gradient(135deg,#1b7cf2,#24a8d7);color:#fff;box-shadow:0 5px 14px rgba(30,130,235,.22)}
+#jmaMap.satellite-mode .jma-time-label{background:rgba(3,14,23,.92);border-color:rgba(255,255,255,.38);box-shadow:0 3px 12px rgba(0,0,0,.4)}
+#jmaMap.satellite-mode .jma-time-label.current{background:rgba(255,255,255,.96);color:#173047}
+#jmaMap.satellite-mode .jma-archive-label{background:rgba(3,14,23,.9);box-shadow:0 3px 10px rgba(0,0,0,.35)}
+@media(max-width:620px){
+  .jma-mapstyle{width:100%;display:grid;grid-template-columns:1fr 1fr}
+  .jma-mapstyle-button{min-height:34px}
+}
+@media(max-width:430px){
+  .jma-mapstyle{order:3}
+  .jma-mapstyle-button{font-size:.59rem}
+}
