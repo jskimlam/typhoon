@@ -125,6 +125,8 @@
     .panel-head h2 { margin: 0; font-size: 1.02rem; letter-spacing: -.02em; }
     .panel-head p { margin: 6px 0 0; color: var(--muted); font-size: .8rem; }
     .badge { padding: 7px 10px; border-radius: 999px; background: rgba(89,216,255,.11); color: var(--cyan); font-size: .72rem; white-space: nowrap; }
+    .map-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .tracker-link { min-height: 34px; padding: 0 11px; border-color: rgba(89,216,255,.3); color: #c9f2ff; font-size: .74rem; }
 
     .map-wrap { position: relative; height: min(61vh, 650px); min-height: 430px; background: #0b1d2d; }
     .map-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
@@ -274,7 +276,10 @@
             <h2>동북아 바람·기압 지도</h2>
             <p>한국·일본·중국 동부·대만·필리핀 해역</p>
           </div>
-          <span class="badge">WINDY</span>
+          <div class="map-actions">
+            <span class="badge">WINDY</span>
+            <a class="button tracker-link" href="https://www.windy.com/hurricanes" target="_blank" rel="noopener noreferrer">Windy 태풍 경로 보기 ↗</a>
+          </div>
         </div>
         <div class="map-wrap">
           <iframe
@@ -284,7 +289,7 @@
             allowfullscreen
             src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=m%2Fs&zoom=4&overlay=wind&product=gfs&level=surface&lat=29.5&lon=132.5&pressure=true&message=true">
           </iframe>
-          <div class="map-label">지도는 Windy 예보 시각화를 사용합니다. 태풍 공식 판정과 통계는 기상청 자료를 기준으로 합니다.</div>
+          <div class="map-label">이 화면은 Windy 바람·기압 지도입니다. 활동 태풍과 예상 경로는 위의 ‘Windy 태풍 경로 보기’에서 확인할 수 있습니다.</div>
         </div>
       </article>
 
@@ -510,4 +515,3 @@
   </script>
 </body>
 </html>
-
