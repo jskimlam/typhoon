@@ -294,26 +294,67 @@
     .legend .impact i { background: var(--yellow); }
     .chart {
       display: grid;
-      grid-template-columns: repeat(12, minmax(34px, 1fr));
+      grid-template-columns: repeat(12, minmax(68px, 1fr));
       align-items: end;
-      gap: 10px;
-      min-height: 285px;
+      gap: 8px;
+      min-height: 352px;
       margin: 16px 20px;
-      padding: 30px 14px 18px;
+      padding: 48px 14px 20px;
       border: 1px solid var(--line);
       border-radius: 16px;
       background:
-        repeating-linear-gradient(to top, transparent 0, transparent 50px, rgba(154,184,214,.08) 51px),
+        repeating-linear-gradient(to top, transparent 0, transparent 61px, rgba(154,184,214,.09) 62px),
         rgba(3, 13, 25, .27);
       overflow-x: auto;
     }
-    .month { min-width: 34px; padding: 7px 2px; border-radius: 10px; text-align: center; }
-    .month.peak-season { background: linear-gradient(to top, rgba(255,110,127,.09), transparent 72%); }
-    .bars { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 205px; }
-    .bar { width: 13px; min-height: 2px; border-radius: 6px 6px 2px 2px; background: linear-gradient(#55a5ff, #2765dd); box-shadow: 0 0 16px rgba(56,135,255,.18); }
-    .bar.impact { width: 8px; background: linear-gradient(#ffe084, #eea52b); box-shadow: 0 0 14px rgba(255,200,92,.16); }
-    .month-label { margin-top: 9px; color: var(--muted); font-size: .69rem; }
-    .month-value { margin-top: 4px; color: #c9d6e3; font-size: .66rem; }
+    .month { min-width: 68px; padding: 8px 3px; border-radius: 12px; text-align: center; }
+    .month.peak-season { background: linear-gradient(to top, rgba(255,110,127,.12), transparent 74%); }
+    .bars { display: flex; align-items: flex-end; justify-content: center; gap: 8px; height: 246px; overflow: visible; }
+    .bar-set { position: relative; display: flex; align-items: flex-end; justify-content: center; width: 32px; height: 100%; }
+    .bar-set.impact-set { width: 24px; }
+    .bar {
+      position: relative;
+      width: 30px;
+      height: var(--bar-height);
+      min-height: 5px;
+      border-radius: 11px 11px 4px 4px;
+      background: linear-gradient(90deg, #2462d8 0%, #58a8ff 48%, #2b72e9 100%);
+      box-shadow: 0 10px 24px rgba(44,126,255,.24), inset 0 1px rgba(255,255,255,.38);
+      transition: transform .2s ease, filter .2s ease;
+    }
+    .bar::after {
+      content: "";
+      position: absolute;
+      inset: 3px 5px auto;
+      height: 38%;
+      border-radius: 8px;
+      background: linear-gradient(rgba(255,255,255,.24), transparent);
+      pointer-events: none;
+    }
+    .bar.impact {
+      width: 20px;
+      background: linear-gradient(90deg, #d9911c 0%, #ffe184 50%, #eda72d 100%);
+      box-shadow: 0 9px 22px rgba(255,190,65,.21), inset 0 1px rgba(255,255,255,.44);
+    }
+    .month:hover .bar { transform: translateY(-3px); filter: saturate(1.14) brightness(1.06); }
+    .bar-number {
+      position: absolute;
+      left: 50%;
+      bottom: calc(var(--bar-height) + 8px);
+      z-index: 2;
+      transform: translateX(-50%);
+      color: #cfe5ff;
+      font-size: .72rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+      white-space: nowrap;
+      text-shadow: 0 2px 7px #020913;
+    }
+    .impact-set .bar-number { color: #ffe18a; }
+    .month-label { margin-top: 12px; color: #d8e5f0; font-size: .76rem; font-weight: 750; }
+    .month.peak-season .month-label { color: #ffb0ba; }
+    .month-value { margin-top: 5px; color: #7990a8; font-size: .61rem; letter-spacing: .02em; }
 
     .season-scale { padding: 0 20px 18px; }
     .season-scale-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--muted); font-size: .7rem; }
@@ -553,16 +594,24 @@
       chart.replaceChildren();
       const max = Math.max(1, ...items.map(item => item.total));
       items.forEach(item => {
+        const totalHeight = Math.max(2, item.total / max * 100);
+        const impactHeight = Math.max(2, item.impact / max * 100);
         const column = document.createElement("div");
         column.className = `month${item.month >= 7 && item.month <= 9 ? " peak-season" : ""}`;
         column.title = `${item.month}월: 전체 ${formatNumber(item.total)}개, 한국 영향 ${formatNumber(item.impact)}개`;
         column.innerHTML = `
           <div class="bars">
-            <div class="bar" style="height:${Math.max(2, item.total / max * 100)}%" aria-hidden="true"></div>
-            <div class="bar impact" style="height:${Math.max(2, item.impact / max * 100)}%" aria-hidden="true"></div>
+            <div class="bar-set" style="--bar-height:${totalHeight}%" aria-label="전체 발생 ${formatNumber(item.total)}개">
+              <span class="bar-number" aria-hidden="true">${formatNumber(item.total)}</span>
+              <div class="bar" aria-hidden="true"></div>
+            </div>
+            <div class="bar-set impact-set" style="--bar-height:${impactHeight}%" aria-label="한국 영향 ${formatNumber(item.impact)}개">
+              <span class="bar-number" aria-hidden="true">${formatNumber(item.impact)}</span>
+              <div class="bar impact" aria-hidden="true"></div>
+            </div>
           </div>
           <div class="month-label">${item.month}월</div>
-          <div class="month-value">${formatNumber(item.total)} · ${formatNumber(item.impact)}</div>
+          <div class="month-value">전체 · 영향</div>
         `;
         chart.appendChild(column);
       });
@@ -571,6 +620,7 @@
     function updateSummary(items, total, impact, isAverage, label) {
       const peak = items.reduce((best, item) => item.total > best.total ? item : best, items[0]);
       document.querySelector("#chartDescription").textContent = `${label} · 파란색 전체 발생, 노란색 한국 영향`;
+      chart.setAttribute("aria-label", `${label} 월별 태풍 통계. ${items.map(item => `${item.month}월 전체 ${formatNumber(item.total)}개, 한국 영향 ${formatNumber(item.impact)}개`).join(". ")}`);
       document.querySelector("#totalLabel").textContent = isAverage ? "연평균 발생" : "연간 발생";
       document.querySelector("#impactLabel").textContent = isAverage ? "연평균 한국 영향" : "연간 한국 영향";
       document.querySelector("#summaryTotal").textContent = `${formatNumber(total)}개`;
