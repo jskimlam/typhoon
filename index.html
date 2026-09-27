@@ -161,7 +161,84 @@
     .source-card p { margin: 0 0 15px; color: var(--muted); font-size: .82rem; line-height: 1.65; }
     .source-link { width: 100%; background: rgba(56,135,255,.13); border-color: rgba(56,135,255,.35); color: #cfe3ff; }
 
-    .chart-panel { margin-top: 16px; }
+    .season-alert {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: center;
+      margin-top: 16px;
+      padding: 20px;
+      border: 1px solid rgba(255, 177, 82, .35);
+      border-radius: 20px;
+      background:
+        linear-gradient(110deg, rgba(255, 153, 63, .17), rgba(255, 79, 96, .09) 58%, rgba(15,31,50,.88)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .season-alert::after {
+      content: "";
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      right: -120px;
+      top: -150px;
+      border-radius: 999px;
+      background: rgba(255, 110, 127, .15);
+      filter: blur(8px);
+      pointer-events: none;
+    }
+    .alert-icon {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      aspect-ratio: 1;
+      border: 1px solid rgba(255, 200, 92, .42);
+      border-radius: 16px;
+      background: rgba(255, 200, 92, .12);
+      color: var(--yellow);
+      font-size: 1.35rem;
+      font-weight: 850;
+    }
+    .alert-copy h2 { margin: 0; font-size: 1.04rem; letter-spacing: -.025em; }
+    .alert-copy p { margin: 7px 0 0; max-width: 850px; color: #d1dde8; font-size: .82rem; line-height: 1.65; }
+    .risk-status {
+      position: relative;
+      z-index: 1;
+      min-width: 142px;
+      padding: 11px 13px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 13px;
+      background: rgba(6,17,31,.56);
+      text-align: right;
+    }
+    .risk-status small { display: block; color: var(--muted); font-size: .66rem; }
+    .risk-status strong { display: block; margin-top: 5px; color: var(--yellow); font-size: .9rem; }
+    .risk-status.peak strong { color: #ff8794; }
+    .risk-status.normal strong { color: var(--green); }
+    .risk-checks {
+      grid-column: 2 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .risk-checks span {
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      color: #becddb;
+      font-size: .7rem;
+    }
+
+    .chart-panel {
+      margin-top: 16px;
+      background:
+        linear-gradient(180deg, rgba(30, 59, 86, .34), transparent 220px),
+        var(--panel);
+    }
+    .chart-heading { border-bottom: 0; padding-bottom: 12px; }
     .chart-tools { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
     .filters { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .filters label { color: var(--muted); font-size: .72rem; }
@@ -180,16 +257,22 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      padding: 16px 20px 0;
+      padding: 4px 20px 0;
     }
     .summary-item {
+      position: relative;
       padding: 13px 14px;
       border: 1px solid var(--line);
       border-radius: 13px;
-      background: rgba(255,255,255,.025);
+      background: linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.018));
+      overflow: hidden;
     }
+    .summary-item::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--blue); }
+    .summary-item:nth-child(2)::before { background: var(--yellow); }
+    .summary-item:nth-child(3)::before { background: var(--cyan); }
+    .summary-item:nth-child(4)::before { background: var(--red); }
     .summary-item small { display: block; color: var(--muted); font-size: .7rem; }
-    .summary-item strong { display: block; margin-top: 6px; font-size: 1.15rem; }
+    .summary-item strong { display: block; margin-top: 7px; font-size: 1.35rem; letter-spacing: -.04em; }
     .legend { display: flex; gap: 13px; color: var(--muted); font-size: .72rem; }
     .legend span { display: inline-flex; align-items: center; gap: 6px; }
     .legend i { width: 8px; height: 8px; border-radius: 3px; background: var(--blue); }
@@ -200,15 +283,40 @@
       align-items: end;
       gap: 10px;
       min-height: 285px;
-      padding: 30px 22px 20px;
+      margin: 16px 20px;
+      padding: 30px 14px 18px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background:
+        repeating-linear-gradient(to top, transparent 0, transparent 50px, rgba(154,184,214,.08) 51px),
+        rgba(3, 13, 25, .27);
       overflow-x: auto;
     }
-    .month { min-width: 34px; text-align: center; }
+    .month { min-width: 34px; padding: 7px 2px; border-radius: 10px; text-align: center; }
+    .month.peak-season { background: linear-gradient(to top, rgba(255,110,127,.09), transparent 72%); }
     .bars { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 205px; }
     .bar { width: 13px; min-height: 2px; border-radius: 6px 6px 2px 2px; background: linear-gradient(#55a5ff, #2765dd); box-shadow: 0 0 16px rgba(56,135,255,.18); }
     .bar.impact { width: 8px; background: linear-gradient(#ffe084, #eea52b); box-shadow: 0 0 14px rgba(255,200,92,.16); }
     .month-label { margin-top: 9px; color: var(--muted); font-size: .69rem; }
     .month-value { margin-top: 4px; color: #c9d6e3; font-size: .66rem; }
+
+    .season-scale { padding: 0 20px 18px; }
+    .season-scale-head { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--muted); font-size: .7rem; }
+    .season-months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; }
+    .season-month {
+      position: relative;
+      padding: 9px 3px;
+      border: 1px solid rgba(101,228,181,.12);
+      border-radius: 8px;
+      background: rgba(101,228,181,.055);
+      color: #91b8aa;
+      text-align: center;
+      font-size: .66rem;
+    }
+    .season-month.watch { border-color: rgba(255,200,92,.25); background: rgba(255,200,92,.09); color: #e7c777; }
+    .season-month.peak { border-color: rgba(255,110,127,.34); background: rgba(255,110,127,.13); color: #ff9faa; font-weight: 750; }
+    .season-month.current { outline: 2px solid var(--text); outline-offset: 2px; }
+    .season-month.current::after { content: "현재"; position: absolute; left: 50%; bottom: -17px; transform: translateX(-50%); color: var(--text); font-size: .56rem; }
 
     .footnote {
       display: flex;
@@ -242,6 +350,12 @@
       .select { flex: 1; }
       .range-fields { width: 100%; }
       .period-summary { padding: 12px 14px 0; }
+      .season-alert { grid-template-columns: auto 1fr; padding: 16px; }
+      .risk-status { grid-column: 1 / -1; width: 100%; text-align: left; }
+      .risk-checks { grid-column: 1 / -1; }
+      .season-scale { padding: 0 14px 18px; overflow-x: auto; }
+      .season-months { min-width: 620px; }
+      .chart { margin-inline: 14px; }
       .footnote { flex-direction: column; gap: 5px; }
     }
   </style>
@@ -326,6 +440,24 @@
       </aside>
     </section>
 
+    <section class="season-alert" aria-labelledby="seasonRiskTitle">
+      <div class="alert-icon" aria-hidden="true">!</div>
+      <div class="alert-copy">
+        <h2 id="seasonRiskTitle">태풍 시즌 · 석유화학 공급망 주의</h2>
+        <p>7~9월은 태풍 발생과 한국 영향이 집중되는 시기입니다. 항만 하역, 선박 운항, 원료 조달과 제품 출하 일정에 지연 가능성을 반영해 사전 여유를 확보하세요.</p>
+      </div>
+      <div class="risk-status" id="riskStatus">
+        <small id="riskMonth">현재 월 기준</small>
+        <strong id="riskLevel">확인 중</strong>
+      </div>
+      <div class="risk-checks" aria-label="태풍 시즌 운영 점검 항목">
+        <span>재고 여유분 확인</span>
+        <span>선박·항만 일정 점검</span>
+        <span>대체 운송 검토</span>
+        <span>고객 납기 사전 조율</span>
+      </div>
+    </section>
+
     <section class="panel chart-panel">
       <div class="panel-head chart-heading">
         <div>
@@ -361,6 +493,10 @@
         <div class="summary-item"><small>한국 영향 비율</small><strong id="summaryRate">—</strong></div>
       </div>
       <div class="chart" id="monthlyChart" role="img" aria-label="기상청 월별 태풍 발생 및 한국 영향 평년값 그래프"></div>
+      <div class="season-scale" aria-label="월별 태풍 시즌 주의 단계">
+        <div class="season-scale-head"><span>연간 태풍 시즌 주의 구간</span><span>7–9월 집중 관리</span></div>
+        <div class="season-months" id="seasonMonths"></div>
+      </div>
       <div class="footnote">
         <span>※ 한국 영향 값은 기상청 통계표의 괄호 안 수치입니다.</span>
         <span>출처: 기상청 날씨누리 · 태풍발생현황 통계</span>
@@ -400,7 +536,7 @@
       const max = Math.max(1, ...items.map(item => item.total));
       items.forEach(item => {
         const column = document.createElement("div");
-        column.className = "month";
+        column.className = `month${item.month >= 7 && item.month <= 9 ? " peak-season" : ""}`;
         column.title = `${item.month}월: 전체 ${formatNumber(item.total)}개, 한국 영향 ${formatNumber(item.impact)}개`;
         column.innerHTML = `
           <div class="bars">
@@ -471,6 +607,30 @@
       renderSelection();
     });
     [startYear, endYear, singleYear].forEach(select => select.addEventListener("change", renderSelection));
+
+    const currentMonth = new Date().getMonth() + 1;
+    const seasonMonths = document.querySelector("#seasonMonths");
+    for (let month = 1; month <= 12; month += 1) {
+      const marker = document.createElement("div");
+      const peak = month >= 7 && month <= 9;
+      const watch = month === 6 || month === 10;
+      marker.className = `season-month${peak ? " peak" : watch ? " watch" : ""}${month === currentMonth ? " current" : ""}`;
+      marker.textContent = `${month}월`;
+      marker.title = peak ? "태풍 집중 관리" : watch ? "태풍 사전·후속 주의" : "평시 모니터링";
+      seasonMonths.appendChild(marker);
+    }
+
+    const riskStatus = document.querySelector("#riskStatus");
+    document.querySelector("#riskMonth").textContent = `${currentMonth}월 현재 운영 단계`;
+    if (currentMonth >= 7 && currentMonth <= 9) {
+      riskStatus.classList.add("peak");
+      document.querySelector("#riskLevel").textContent = "주의 강화 · 집중 관리";
+    } else if (currentMonth === 6 || currentMonth === 10) {
+      document.querySelector("#riskLevel").textContent = "사전·후속 점검";
+    } else {
+      riskStatus.classList.add("normal");
+      document.querySelector("#riskLevel").textContent = "평시 모니터링";
+    }
 
     fetch("data/kma-annual.json")
       .then(response => {
