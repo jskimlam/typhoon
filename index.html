@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="description" content="기상청 공식 태풍정보와 과거 통계를 함께 보는 동북아 태풍 대시보드">
   <link rel="icon" type="image/png" href="assets/lam-typhoon-icon.png">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
@@ -631,6 +631,26 @@
       .shell { padding-block: 12px; }
       header { margin-bottom: 11px; }
       .notice { margin-bottom: 11px; padding-block: 10px; }
+    }
+
+  
+    @media (min-width: 621px) and (max-width: 900px) {
+      .side > .source-card { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-bottom: max(10px, env(safe-area-inset-bottom));
+      }
+    }
+
+    @media (max-width: 350px) {
+      .shell {
+        padding-left: max(7px, env(safe-area-inset-left));
+        padding-right: max(7px, env(safe-area-inset-right));
+      }
     }
 
   </style>
