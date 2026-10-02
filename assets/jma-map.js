@@ -48,6 +48,7 @@
   let mode = "current";
   let lastTargetRefresh = 0;
   let targetCache = [];
+  let liveSelectionTouched = false;
   let archiveRows = [];
   let archiveStormMeta = new Map();
   let archivePdfTrackCache = new Map();
@@ -240,14 +241,26 @@
     }
   }
 
+  const typhoonSequence = target => {
+    const raw=String(target?.typhoonNumber||"");
+    const match=raw.match(/(\d{1,2})$/);
+    return raw.length>2 && match ? Number(match[1]) : -1;
+  };
+
   async function loadTargets(force=false){
     if (!force && Date.now()-lastTargetRefresh<60_000) return;
     setStatus("현재 태풍 확인 중","loading");
     try{
       const targets=await fetchJson(`${JMA_BASE}/targetTc.json`);
       lastTargetRefresh=Date.now();
-      targetCache=Array.isArray(targets)?targets:[];
       const previous=activeSelect.value;
+      targetCache=(Array.isArray(targets)?targets:[])
+        .slice()
+        .sort((a,b)=>{
+          const diff=typhoonSequence(b)-typhoonSequence(a);
+          if(diff) return diff;
+          return String(b.typhoonNumber||"").localeCompare(String(a.typhoonNumber||""));
+        });
       activeSelect.innerHTML="";
       targetCache.forEach(t=>{
         const opt=document.createElement("option");
@@ -262,8 +275,12 @@
         setStatus("현재 발표 중 태풍 없음","ok");
         return;
       }
-      if (targetCache.some(t=>t.tropicalCyclone===previous)) activeSelect.value=previous;
-      else activeSelect.value=targetCache[targetCache.length-1].tropicalCyclone;
+
+      const latestTyphoon=targetCache.find(t=>typhoonSequence(t)>=0) || targetCache[0];
+      const previousExists=targetCache.some(t=>t.tropicalCyclone===previous);
+      if(liveSelectionTouched && previousExists) activeSelect.value=previous;
+      else activeSelect.value=latestTyphoon.tropicalCyclone;
+
       await loadSelectedLive();
     }catch(err){
       console.error(err);
@@ -631,7 +648,7 @@
   archiveModeButton.addEventListener("click",()=>setMode("archive"));
   mapStyleSatellite?.addEventListener("click",()=>setMapStyle("satellite", true));
   mapStyleStandard?.addEventListener("click",()=>setMapStyle("standard", true));
-  activeSelect.addEventListener("change",loadSelectedLive);
+  activeSelect.addEventListener("change",()=>{ liveSelectionTouched=true; loadSelectedLive(); });
   archiveYear.addEventListener("change",()=>loadArchiveYear(true));
   archiveStormSelect.addEventListener("change",renderArchiveStorm);
   refreshButton.addEventListener("click",manualRefresh);
