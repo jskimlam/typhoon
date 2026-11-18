@@ -1147,12 +1147,14 @@
 
     const syncTime = document.querySelector("#syncTime");
     const updateSyncTime = () => {
-      syncTime.textContent = `화면 동기화 ${new Intl.DateTimeFormat("ko-KR", {
+      const locale = window.typhoonI18n?.language === "ja" ? "ja-JP" : "ko-KR";
+      syncTime.textContent = `화면 동기화 ${new Intl.DateTimeFormat(locale, {
         dateStyle: "medium",
         timeStyle: "short"
       }).format(new Date())}`;
     };
 
+    document.addEventListener("typhoon-language-change", updateSyncTime);
     updateSyncTime();
   </script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
