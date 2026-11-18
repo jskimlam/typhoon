@@ -236,21 +236,21 @@
   function translateSubtree(root) {
     if (!root) return;
     if (root.nodeType === Node.TEXT_NODE) {
-      if (!root.parentElement || root.parentElement.closest("script,style,noscript")) return;
+      if (!root.parentElement || root.parentElement.closest("script,style,noscript,[data-no-translate]")) return;
       translateNode(root);
       return;
     }
     if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_NODE) return;
-    if (root.nodeType === Node.ELEMENT_NODE && root.matches("script,style,noscript")) return;
+    if (root.nodeType === Node.ELEMENT_NODE && root.matches("script,style,noscript,[data-no-translate]")) return;
     const element = root.nodeType === Node.ELEMENT_NODE ? root : root.documentElement;
     if (!element) return;
     translateAttributes(element);
     element.querySelectorAll("*").forEach(el => {
-      if (!el.matches("script,style,noscript")) translateAttributes(el);
+      if (!el.closest("[data-no-translate]") && !el.matches("script,style,noscript")) translateAttributes(el);
     });
     const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, {
       acceptNode(node) {
-        return node.parentElement?.closest("script,style,noscript")
+        return node.parentElement?.closest("script,style,noscript,[data-no-translate]")
           ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
       }
     });
