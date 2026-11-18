@@ -105,7 +105,10 @@
       .replace(/[\\/:*?"<>|]/g, "")
       .replace(/\s+/g, "_")
       .slice(0, 70);
-    return `월별태풍통계_${base}${suffix}.${ext}`;
+    const localizedBase = window.typhoonI18n?.translate(base) ?? base;
+    const prefix = window.typhoonI18n?.language === "ja" ? "月別台風統計_" : "월별태풍통계_";
+    const localizedSuffix = window.typhoonI18n?.translate(suffix) ?? suffix;
+    return `${prefix}${localizedBase}${localizedSuffix}.${ext}`;
   }
 
   function downloadBlob(blob, filename) {
@@ -206,7 +209,7 @@
       `;
     }).join("");
 
-    return `<svg xmlns="${SVG_NS}" width="${EXPORT_W}" height="${EXPORT_H}" viewBox="0 0 ${EXPORT_W} ${EXPORT_H}">
+    const svgSource = `<svg xmlns="${SVG_NS}" width="${EXPORT_W}" height="${EXPORT_H}" viewBox="0 0 ${EXPORT_W} ${EXPORT_H}">
       <defs>
         <linearGradient id="blueBar" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#69A8FF"/><stop offset="52%" stop-color="#3987F5"/><stop offset="100%" stop-color="#2268D6"/>
@@ -215,7 +218,7 @@
           <stop offset="0%" stop-color="#FFE08A"/><stop offset="52%" stop-color="#F3BE43"/><stop offset="100%" stop-color="#D99B1B"/>
         </linearGradient>
         <style>
-          text{font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif}
+          text{font-family:Pretendard,"Noto Sans JP","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif}
           .title{font-size:38px;font-weight:900;fill:#10263A;letter-spacing:-1px}
           .subtitle{font-size:18px;font-weight:600;fill:#6A8092}
           .eyebrow{font-size:13px;font-weight:900;fill:#7890A4;letter-spacing:2px}
@@ -246,6 +249,7 @@
       <text x="72" y="873" class="footer">※ %는 구성비입니다. 한국 영향 결측 연도는 비중 계산에서 제외합니다.</text>
       <text x="1528" y="873" text-anchor="end" class="footer">출처: 기상청 날씨누리 · 태풍발생현황 통계</text>
     </svg>`;
+    return window.typhoonI18n?.translate(svgSource) ?? svgSource;
   }
 
   async function svgToPngBlob(svg, transparent) {
