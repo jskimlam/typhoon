@@ -302,7 +302,6 @@
   };
   updateButtons();
   translateSubtree(document.documentElement);
-  document.dispatchEvent(new CustomEvent("typhoon-language-change", { detail: { language } }));
   observer.observe(document.documentElement, {
     childList: true,
     characterData: true,
@@ -310,4 +309,5 @@
     attributeFilter: ATTRIBUTES,
     subtree: true
   });
+  document.dispatchEvent(new CustomEvent("typhoon-language-change", { detail: { language } }));
 })();
