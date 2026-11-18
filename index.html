@@ -87,7 +87,29 @@
     h1 { margin: 0; font-size: clamp(1.15rem, 3vw, 1.55rem); letter-spacing: -.04em; }
     .eyebrow { margin: 2px 0 0; color: var(--muted); font-size: .78rem; }
 
+
     .actions { display: flex; gap: 9px; flex-wrap: wrap; justify-content: flex-end; }
+    .locale-picker {
+      display: inline-flex; gap: 3px; align-items: center; align-self: center;
+      padding: 4px; border: 1px solid rgba(89,216,255,.32);
+      border-radius: 12px; background: rgba(7,20,36,.75);
+      white-space: nowrap;
+    }
+    .locale-option {
+      min-height: 34px; padding: 0 11px; border: 0; border-radius: 9px;
+      background: transparent; color: #b9d1e5; cursor: pointer;
+      font: inherit; font-size: .76rem; font-weight: 800;
+    }
+    .locale-option[aria-pressed="true"] {
+      background: linear-gradient(135deg,#1a7af2,#30b6d7);
+      color: white; box-shadow: 0 3px 12px rgba(25,133,221,.2);
+    }
+    .locale-option:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+    @media (max-width:620px) {
+      .locale-picker { grid-column: 1 / -1; justify-self: end; }
+      .locale-option { min-height: 30px; padding-inline: 10px; font-size: .72rem; }
+    }
+
     .button {
       display: inline-flex;
       align-items: center;
@@ -688,6 +710,10 @@
         </div>
       </div>
       <div class="actions">
+        <div class="locale-picker" role="group" aria-label="Language" data-no-translate>
+          <button class="locale-option" id="languageKo" type="button" lang="ko" aria-pressed="true">🇰🇷 한국어</button>
+          <button class="locale-option" id="languageJa" type="button" lang="ja" aria-pressed="false">🇯🇵 日本語</button>
+        </div>
         <a class="button official" href="https://www.weather.go.kr/w/hazard/typhoon/stat.do" target="_blank" rel="noopener noreferrer">기상청 원문 ↗</a>
         <a class="button" href="https://www.jma.go.jp/bosai/map.html#5/33.852/135.571/&amp;elem=root&amp;contents=typhoon" target="_blank" rel="noopener noreferrer">JMA 태풍지도 ↗</a>
         <a class="button" href="https://www.windy.com/" target="_blank" rel="noopener noreferrer">Windy 열기 ↗</a>
@@ -1138,5 +1164,6 @@
   </script>
   <script src="assets/jma-map.js?v=20261002-01"></script>
   <script src="assets/chart-export.js"></script>
+  <script src="assets/i18n.js?v=20261119-01"></script>
 </body>
 </html>
