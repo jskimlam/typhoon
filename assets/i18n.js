@@ -172,6 +172,8 @@
     ["발생", "発生"],
     ["공식 자료", "公式資料"],
     ["추천", "おすすめ"],
+    ["오전", "午前"],
+    ["오후", "午後"],
     ["현재", "現在"],
     ["일본 기상청", "気象庁（JMA）"],
     ["기상청", "気象庁"],
@@ -300,6 +302,7 @@
   };
   updateButtons();
   translateSubtree(document.documentElement);
+  document.dispatchEvent(new CustomEvent("typhoon-language-change", { detail: { language } }));
   observer.observe(document.documentElement, {
     childList: true,
     characterData: true,
